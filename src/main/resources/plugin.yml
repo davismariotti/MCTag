@@ -1,0 +1,7 @@
+main: info.gomeow.mctag.MCTag
+name: MCTag
+version: ${project.version}
+author: gomeow
+commands:
+  tag:
+    description: All MCTag commands
