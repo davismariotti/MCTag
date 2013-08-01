@@ -2,21 +2,24 @@ package info.gomeow.mctag;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MCTag extends JavaPlugin {
 
-    private static MCTag instance;
+    static MCTag instance;
+    static Logger LOG;
 
-    private GameManager manager;
-    private File dataFile;
-    private YamlConfiguration data;
+    Manager manager;
+    File dataFile;
+    YamlConfiguration data;
 
     public void onEnable() {
         instance = this;
-        manager = new GameManager();
+        LOG = getLogger();
+        manager = new Manager(this);
     }
 
     public void loadData() {
@@ -44,12 +47,8 @@ public class MCTag extends JavaPlugin {
         }
     }
 
-    public GameManager getManager() {
+    public Manager getManager() {
         return manager;
-    }
-
-    public static MCTag getInstance() {
-        return instance;
     }
 
 }
