@@ -10,6 +10,8 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -17,6 +19,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Match {
 
     String name;
+    ConfigurationSection config;
     Map<String, Integer> players = new HashMap<String, Integer>(); // Name, tags
     State state = State.LOBBY;
 
@@ -31,8 +34,14 @@ public class Match {
 
     Random rand = new Random();
 
-    public Match(String n) {
+    Location itspawn;
+    Location regularspawn;
+
+    public Match(String n, ConfigurationSection section) {
         name = n;
+        config = section;
+        itspawn = Manager.getLocation(config.getString("itspawn"));
+        regularspawn = Manager.getLocation(config.getString("regularspawn"));
     }
 
     public String getName() {
@@ -78,6 +87,10 @@ public class Match {
 
     public String getIT() {
         return it;
+    }
+
+    public void tag(Player tagger, Player tagged) {
+
     }
 
     public int givePoint(Player player) {

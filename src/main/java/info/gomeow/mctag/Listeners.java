@@ -5,7 +5,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -18,13 +18,17 @@ public class Listeners implements Listener {
     }
 
     @EventHandler
-    public void onDamage(EntityDamageEvent event) {
-        if(event.getEntityType() == EntityType.PLAYER) {
+    public void onDamage(EntityDamageByEntityEvent event) {
+        if(event.getEntityType() == EntityType.PLAYER && event.getDamager().getType() == EntityType.PLAYER) {
             Player player = (Player) event.getEntity();
+            Player damager = (Player) event.getDamager();
             Match match = plugin.getManager().getMatch(player);
-            if(match != null) {
+            if((match != null) && (match.equals(plugin.getManager().getMatch(damager)))) {
                 // TODO Add config option to configure protecting players
                 event.setCancelled(true);
+                if(match.getIT().equals(damager.getName())) {
+                    match.tag(damager, player);
+                }
             }
         }
     }

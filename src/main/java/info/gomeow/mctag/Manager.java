@@ -9,6 +9,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -26,7 +27,11 @@ public class Manager {
         plugin = mct;
         if(plugin.getData().isConfigurationSection("maps")) {
             for(String key:plugin.getData().getConfigurationSection("maps").getKeys(false)) {
-                // Set<String> keys = plugin.getData().getConfigurationSection("maps." + key).getKeys(false);
+                ConfigurationSection section = plugin.getData().getConfigurationSection("maps." + key);
+                if(section.contains("itspawn") && section.contains("regularspawn")) {
+                    matches.put(key, new Match(key, section));
+                    plugin.getLogger().info("Arena found: " + key); // TODO Remove debug
+                }
             }
         }
     }
