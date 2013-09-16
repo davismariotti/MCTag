@@ -1,11 +1,13 @@
 package info.gomeow.mctag;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class Listeners implements Listener {
 
@@ -39,6 +41,14 @@ public class Listeners implements Listener {
                     // TODO check if player is tagger
                 }
             }
+        }
+    }
+    @EventHandler
+         public void onJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        if (player.isOp() && MCTag.UPDATE) {
+            player.sendMessage(ChatColor.GREEN + "Version " + MCTag.NEWVERSION + " of PlayerVaults is up for download!");
+            player.sendMessage(ChatColor.GREEN + MCTag.LINK + " to view the changelog and download!");
         }
     }
 

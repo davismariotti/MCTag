@@ -1,0 +1,3 @@
+# Whether or not you want to check for updates.
+# Will not download an update, that is your job :)
+check-update: true
