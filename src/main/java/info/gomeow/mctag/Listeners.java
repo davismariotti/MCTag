@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.EntityType;
@@ -16,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -107,25 +107,29 @@ public class Listeners implements Listener {
     }
 
     @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
+    public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Block block = event.getClickedBlock();
-            if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
+            if (block.getState() instanceof Sign) {
                 Sign sign = (Sign) block.getState();
-                if (ChatColor.stripColor(sign.getLine(0)).equalsIgnoreCase("[Join]")) {
-                    String name = ChatColor.stripColor(sign.getLine(1)).toLowerCase();
-                    if (!name.equalsIgnoreCase("")) {
-                        Match match = plugin.getManager().getMatch(name);
+                String[] lines = sign.getLines();
+                if (ChatColor.stripColor(lines[0]).equalsIgnoreCase("[join]")) {
+                    if (!lines[1].equalsIgnoreCase("")) {
+                        Match match = plugin.getManager().signExists(block.getLocation());
                         if (match != null) {
-                            if (player.hasPermission("mctag.join")) {
-                                match.addPlayer(player);
+                            event.setCancelled(true);
+                            if (!match.isFull()) {
+                                if (match.getState() == State.LOBBY) {
+                                    if (plugin.getManager().getMatch(player) != null && plugin.getManager().getMatch(player) != match) {
+                                        plugin.getManager().getMatch(player).removePlayer(player);
+                                    }
+                                    match.addPlayer(player);
+                                } else {
+                                    player.sendMessage(ChatColor.RED + "That match is already is progress!");
+                                }
                             } else {
-                                player.sendMessage(ChatColor.RED + "You do not have permission to do that.");
-                            }
-                        } else {
-                            if (Manager.mapExists(name)) {
-                                player.sendMessage(ChatColor.DARK_RED + "That match is not correctly setup.");
+                                player.sendMessage(ChatColor.RED + "That match is full!");
                             }
                         }
                     }
@@ -136,10 +140,17 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        Player player = event.getPlayer();
-        Block block = event.getBlock();
+        removeSign(event.getBlock());
+    }
+
+    @EventHandler
+    public void onPhysics(BlockPhysicsEvent event) {
+        removeSign(event.getBlock());
+    }
+
+    public void removeSign(Block block) {
         Location location = block.getLocation();
-        if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
+        if (block.getState() instanceof Sign) {
             Sign sign = (Sign) block.getState();
             if (ChatColor.stripColor(sign.getLine(0)).equalsIgnoreCase("[Join]")) {
                 String name = ChatColor.stripColor(sign.getLine(1)).toLowerCase();

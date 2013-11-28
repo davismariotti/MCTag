@@ -109,6 +109,15 @@ public class Manager {
         return false;
     }
 
+    public Match signExists(Location l) {
+        for (Match match : matches.values()) {
+            if (match.containsSign(l)) {
+                return match;
+            }
+        }
+        return null;
+    }
+
     public static void saveInventory(Player player) {
         inventories.put(player.getName(), new InventoryData(player.getInventory()));
         player.getInventory().clear();
