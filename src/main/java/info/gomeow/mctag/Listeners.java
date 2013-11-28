@@ -21,7 +21,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 public class Listeners implements Listener {
 
@@ -64,15 +63,6 @@ public class Listeners implements Listener {
             } else {
                 tagger.sendMessage(ChatColor.RED + "Please wait until the safe period is over.");
             }
-        }
-    }
-
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        if (player.isOp() && MCTag.UPDATE) {
-            player.sendMessage(ChatColor.GREEN + "Version " + MCTag.NEWVERSION + " of PlayerVaults is up for download!");
-            player.sendMessage(ChatColor.GREEN + MCTag.LINK + " to view the changelog and download!");
         }
     }
 

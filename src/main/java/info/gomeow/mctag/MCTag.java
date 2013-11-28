@@ -13,9 +13,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class MCTag extends JavaPlugin {
 
     static MCTag instance;
-    public static boolean UPDATE = false;
-    public static String NEWVERSION = "";
-    public static String LINK = "";
 
     Manager manager;
     File dataFile;
