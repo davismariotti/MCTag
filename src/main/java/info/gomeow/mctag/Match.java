@@ -48,7 +48,7 @@ public class Match {
     Location spawn;
     Set<Location> signs = new HashSet<Location>();
 
-    boolean safe = false; // TODO Make configurable
+    boolean safe = false;
 
     boolean safeperiod;
     boolean tagbacks;
