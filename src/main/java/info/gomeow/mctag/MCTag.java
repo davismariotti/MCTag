@@ -4,7 +4,6 @@ import info.gomeow.mctag.util.Updater;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -27,6 +26,7 @@ public class MCTag extends JavaPlugin {
         instance = this;
         LOG = getLogger();
         manager = new Manager(this);
+        checkUpdate();
     }
 
     public void onDisable() {
@@ -72,18 +72,9 @@ public class MCTag extends JavaPlugin {
 
             public void run() {
                 if (getConfig().getBoolean("check-update")) {
-                    if (getConfig().getBoolean("check-update")) {
-                        try {
-                            Updater u = new Updater(getDescription().getVersion());
-                            if (UPDATE = u.getUpdate()) {
-                                LINK = u.getLink();
-                                NEWVERSION = u.getNewVersion();
-                            }
-                        } catch (Exception e) {
-                            getLogger().log(Level.WARNING, "Failed to check for updates.");
-                            getLogger().log(Level.WARNING, "Report this stack trace to gomeow or hawkfalcon.");
-                            e.printStackTrace();
-                        }
+                    Updater updater = new Updater(MCTag.instance, 40098, getFile(), Updater.UpdateType.DEFAULT, true);
+                    if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE) {
+                        getLogger().info("New version available! " + updater.getLatestName());
                     }
                 }
             }
