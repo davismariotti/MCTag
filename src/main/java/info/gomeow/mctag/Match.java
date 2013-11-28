@@ -29,6 +29,7 @@ public class Match {
     GameMode mode = GameMode.NORMAL;
     ConfigurationSection config;
     Map<String, Integer> players = new HashMap<String, Integer>(); // Name, tags
+    Set<String> frozen = new HashSet<String>();
     State state = State.LOBBY;
 
     BukkitRunnable startRun;
@@ -241,10 +242,18 @@ public class Match {
             scoreboard = scoreboardManager.getNewScoreboard();
             scores = scoreboard.registerNewObjective("Tags", "dummy");
             scores.setDisplaySlot(DisplaySlot.SIDEBAR);
-            scores.setDisplayName(ChatColor.RED.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Tags");
+            scores.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Tags");
             for (Player player : getPlayers()) {
                 player.setScoreboard(scoreboard);
-                String name = (player.getName().equalsIgnoreCase(it)) ? ChatColor.RED + player.getName() : ChatColor.BLUE + player.getName();
+                ChatColor color;
+                if (player.getName().equals(it)) {
+                    color = ChatColor.RED;
+                } else if (frozen.contains(player.getName()) && mode == GameMode.FREEZE) {
+                    color = ChatColor.BLUE;
+                } else {
+                    color = ChatColor.BLUE;
+                }
+                String name = color + player.getName();
                 if (name.length() >= 16) {
                     name = name.substring(0, 15);
                 }
@@ -252,6 +261,16 @@ public class Match {
                 score.setScore(players.get(player.getName()));
             }
         }
+    }
+
+    public void freeze(Player player) {
+        player.setPassenger(player);
+        frozen.add(player.getName());
+    }
+
+    public void unfreeze(Player player) {
+        player.eject();
+        frozen.remove(player.getName());
     }
 
 }
