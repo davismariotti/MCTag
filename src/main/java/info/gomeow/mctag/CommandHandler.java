@@ -105,7 +105,7 @@ public class CommandHandler implements CommandExecutor {
                         sender.sendMessage(ChatColor.RED + "You don't have permission to do that!");
                     }
                 } else if (args[0].equalsIgnoreCase("set")) {
-                    if (sender.hasPermission("mctag.set")) {
+                    if (sender.hasPermission("mctag.admin")) {
                         if (args.length >= 4) {
                             String name = args[1];
                             if (Manager.mapExists(name)) {
