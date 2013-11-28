@@ -3,6 +3,7 @@ package info.gomeow.mctag;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -20,30 +21,28 @@ public class Listeners implements Listener {
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
         if (event.getEntityType() == EntityType.PLAYER && event.getDamager().getType() == EntityType.PLAYER) {
-            Player player = (Player) event.getEntity();
-            Player damager = (Player) event.getDamager();
-            Match match = plugin.getManager().getMatch(player);
-            if ((match != null) && (match.equals(plugin.getManager().getMatch(damager)))) {
-                // TODO Add config option to configure protecting players
-                event.setCancelled(true);
-                if (match.getIT().equals(damager.getName())) {
-                    match.tag(damager, player);
-                }
-            }
+            Player player = (Player) event.getEntity(); // tagged
+            Player damager = (Player) event.getDamager(); // tagger
+            tag(damager, player, event);
         }
     }
 
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
-        Player player = (Player) event.getPlayer();
-        if (event.getRightClicked() instanceof Player) {
-            Player interacted = (Player) event.getRightClicked();
-            Match match = plugin.getManager().getMatch(player);
-            Match match2 = plugin.getManager().getMatch(interacted);
-            if (match != null && match2 != null) {
-                if (match.getName().equals(match2.getName())) {
-                    // TODO check if player is tagger
-                }
+        Player player = (Player) event.getPlayer(); // tagger
+        if (event.getRightClicked().getType() == EntityType.PLAYER) {
+            Player interacted = (Player) event.getRightClicked(); // tagged
+            tag(player, interacted, event);
+        }
+    }
+
+    public void tag(Player tagger, Player tagged, Cancellable event) {
+        Match match = plugin.getManager().getMatch(tagger);
+        if ((match != null) && (match.equals(plugin.getManager().getMatch(tagged)))) {
+            // TODO Add config option to configure protecting players
+            event.setCancelled(true);
+            if (match.getIT().equals(tagger.getName())) {
+                match.tag(tagger, tagged);
             }
         }
     }
