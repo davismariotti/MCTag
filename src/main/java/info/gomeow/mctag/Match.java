@@ -1,6 +1,7 @@
 package info.gomeow.mctag;
 
 import info.gomeow.mctag.util.Equip;
+import info.gomeow.mctag.util.GameMode;
 import info.gomeow.mctag.util.State;
 
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Match {
 
     String name;
+    GameMode mode = GameMode.NORMAL;
     ConfigurationSection config;
     Map<String, Integer> players = new HashMap<String, Integer>(); // Name, tags
     State state = State.LOBBY;

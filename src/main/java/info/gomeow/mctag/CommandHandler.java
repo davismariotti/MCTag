@@ -1,5 +1,6 @@
 package info.gomeow.mctag;
 
+import info.gomeow.mctag.util.GameMode;
 import info.gomeow.mctag.util.State;
 
 import org.bukkit.ChatColor;
@@ -33,7 +34,7 @@ public class CommandHandler implements CommandExecutor {
                         if (args.length == 2) {
                             String name = args[1].toLowerCase();
                             if (!Manager.mapExists(name)) {
-                                plugin.getData().set("maps." + name + ".placeholder", true);
+                                plugin.getData().set("maps." + name + ".mode", "NORMAL");
                                 plugin.saveData();
                                 sender.sendMessage(ChatColor.GREEN + "Match created!");
                             } else {
@@ -108,13 +109,21 @@ public class CommandHandler implements CommandExecutor {
                         if (args.length >= 4) {
                             String name = args[1];
                             if (Manager.mapExists(name)) {
-                                if (args[2].equalsIgnoreCase("tagbacks")) {
+                                if (args[2].equalsIgnoreCase("mode")) {
+                                    GameMode mode = GameMode.valueOf(args[3]);
+                                    if (mode != null) {
+                                        plugin.getData().set("maps." + name + ".mode", mode.toString());
+                                        plugin.saveData();
+                                    } else {
+                                        sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> mode <normal/freeze>");
+                                    }
+                                } else if (args[2].equalsIgnoreCase("tagbacks")) {
                                     try {
                                         boolean bool = getBoolean(args[3]);
                                         plugin.getData().set("maps." + name + ".tagbacks", bool);
                                         plugin.saveData();
                                     } catch (IllegalArgumentException e) {
-                                       sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> tagbacks <true/false>");
+                                        sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> tagbacks <true/false>");
                                     }
                                 } else {
                                     sender.sendMessage(ChatColor.RED + "That is not a valid command!");
