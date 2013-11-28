@@ -13,6 +13,7 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -45,6 +46,7 @@ public class Match {
     Random rand = new Random();
 
     Location spawn;
+    Set<Location> signs = new HashSet<Location>();
 
     boolean safe = false; // TODO Make configurable
 
@@ -62,10 +64,50 @@ public class Match {
         spawn = Manager.getLocation(config.getString("spawn"));
         safeperiod = config.getBoolean("safeperiod", true);
         safeperiod = config.getBoolean("tagbacks", true);
+        updateSigns();
     }
 
     public String getName() {
         return name;
+    }
+
+    public Set<Sign> getSigns() {
+        Set<Sign> signBlocks = new HashSet<Sign>();
+        for (Location l : signs) {
+            if (l.getBlock().getState() instanceof Sign) {
+                signBlocks.add((Sign) l.getBlock().getState());
+            }
+        }
+        return signBlocks;
+    }
+
+    public void addSign(Location l) {
+        signs.add(l);
+        updateSigns();
+    }
+
+    public void removeSign(Location l) {
+        signs.remove(l);
+        updateSigns();
+    }
+
+    public boolean containsSign(Location l) {
+        for (Location s : signs) {
+            if (l.getX() == s.getX() && l.getY() == s.getY() && l.getZ() == s.getZ()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void updateSigns() {
+        for (Sign sign : getSigns()) {
+            sign.setLine(0, ChatColor.YELLOW + "[Join]");
+            sign.setLine(1, ChatColor.BOLD + name);
+            sign.setLine(2, ChatColor.BLACK + "" + players.size() + " players");
+            sign.setLine(3, (state == State.LOBBY) ? ChatColor.GREEN + "In Lobby" : ChatColor.DARK_RED + "In Game");
+            sign.update();
+        }
     }
 
     public void addPlayer(Player player) {
@@ -74,6 +116,7 @@ public class Match {
         if (players.size() >= MCTag.instance.getConfig().getInt("minimum-players", 4)) {
             countdown();
         }
+        updateSigns();
     }
 
     public void removePlayer(Player player) {
@@ -96,6 +139,7 @@ public class Match {
             Manager.loadInventory(player);
         }
         setupScoreboard();
+        updateSigns();
     }
 
     public Set<Player> getPlayers() {
@@ -172,6 +216,7 @@ public class Match {
 
     public void startGame() {
         state = State.INGAME;
+        updateSigns();
         int item = rand.nextInt(players.size());
         int i = 0;
         for (String name : players.keySet()) {
@@ -228,6 +273,7 @@ public class Match {
             players.clear();
             it = null;
         }
+        updateSigns();
     }
 
     public void removePotionEffects(Player player) {

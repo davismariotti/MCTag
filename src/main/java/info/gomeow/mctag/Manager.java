@@ -49,6 +49,15 @@ public class Manager {
         return null;
     }
 
+    public Match getMatch(Location sign) {
+        for (Match match : matches.values()) {
+            if (match.containsSign(sign)) {
+                return match;
+            }
+        }
+        return null;
+    }
+
     public Collection<Match> getMatches() {
         return matches.values();
     }

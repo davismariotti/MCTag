@@ -2,15 +2,25 @@ package info.gomeow.mctag;
 
 import info.gomeow.mctag.util.State;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class Listeners implements Listener {
@@ -77,6 +87,82 @@ public class Listeners implements Listener {
                         if (!event.getMessage().toLowerCase().startsWith("/leave")) {
                             event.setCancelled(true);
                             player.sendMessage(ChatColor.DARK_RED + "You cannot use commands ingame. Please use /leave if you need to leave.");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    @EventHandler
+    public void onSignChange(SignChangeEvent event) {
+        if (event.getLine(0).equals("[Join]")) {
+            String name = event.getLine(1);
+            if (Manager.mapExists(name)) {
+                Location location = event.getBlock().getLocation();
+                String loc = Manager.locToString(location, false);
+                List<String> locs = plugin.getData().getStringList("maps." + name + ".signs");
+                locs.add(loc);
+                plugin.getData().set("maps." + name + ".signs", locs);
+                plugin.saveData();
+                Match match = plugin.getManager().getMatch(name);
+                if (match != null) {
+                    match.addSign(location);
+                }
+            } else {
+                event.getPlayer().sendMessage(ChatColor.RED + "That match does not exist.");
+            }
+        }
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            Block block = event.getClickedBlock();
+            if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
+                Sign sign = (Sign) block.getState();
+                if (ChatColor.stripColor(sign.getLine(0)).equalsIgnoreCase("[Join]")) {
+                    String name = ChatColor.stripColor(sign.getLine(1));
+                    if (!name.equalsIgnoreCase("")) {
+                        Match match = plugin.getManager().getMatch(name);
+                        if (match != null) {
+                            if (player.hasPermission("mctag.join")) {
+                                match.addPlayer(player);
+                            } else {
+                                player.sendMessage(ChatColor.RED + "You do not have permission to do that.");
+                            }
+                        } else {
+                            if (Manager.mapExists(name)) {
+                                player.sendMessage(ChatColor.DARK_RED + "That match is not correctly setup.");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        Block block = event.getBlock();
+        Location location = block.getLocation();
+        if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
+            Sign sign = (Sign) block.getState();
+            if (ChatColor.stripColor(sign.getLine(0)).equalsIgnoreCase("[Join]")) {
+                String name = ChatColor.stripColor(sign.getLine(1));
+                if (!name.equalsIgnoreCase("")) {
+                    if (Manager.mapExists(name)) {
+                        String loc = Manager.locToString(location, false);
+                        List<String> locs = plugin.getData().getStringList("maps." + name + ".signs");
+                        locs.remove(loc);
+                        plugin.getData().set("maps." + name + ".signs", locs);
+                        plugin.saveData();
+                        Match match = plugin.getManager().getMatch(name);
+                        if (match != null) {
+                            match.removeSign(location);
                         }
                     }
                 }
