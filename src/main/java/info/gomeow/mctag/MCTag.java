@@ -30,7 +30,9 @@ public class MCTag extends JavaPlugin {
     }
 
     public void onDisable() {
-        // TODO Return inventories
+        for (Match match : manager.getMatches()) {
+            match.reset();
+        }
     }
 
     public void loadData() {
