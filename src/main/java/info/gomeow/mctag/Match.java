@@ -48,6 +48,9 @@ public class Match {
 
     boolean safe = false; // TODO Make configurable
 
+    boolean safeperiod;
+    boolean tagbacks;
+
     final ScoreboardManager scoreboardManager;
     Scoreboard scoreboard;
     Objective scores;
@@ -58,6 +61,8 @@ public class Match {
         config = section;
         itspawn = Manager.getLocation(config.getString("itspawn"));
         regularspawn = Manager.getLocation(config.getString("regularspawn"));
+        safeperiod = config.getBoolean("safeperiod", true);
+        safeperiod = config.getBoolean("tagbacks", true);
     }
 
     public String getName() {
@@ -188,14 +193,16 @@ public class Match {
             }
             player.setHealth(player.getMaxHealth());
         }
-        safe = true;
         setupScoreboard();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                safe = false;
-            }
-        }.runTaskLater(MCTag.instance, 400L); // TODO Make configurable
+        if (safeperiod) {
+            safe = true;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    safe = false;
+                }
+            }.runTaskLater(MCTag.instance, 400L); // TODO Make configurable
+        }
 
         endRun = new BukkitRunnable() {
 
@@ -232,15 +239,15 @@ public class Match {
     }
 
     public void setupScoreboard() {
-        if(state == State.INGAME) {
+        if (state == State.INGAME) {
             scoreboard = scoreboardManager.getNewScoreboard();
             scores = scoreboard.registerNewObjective("Tags", "dummy");
             scores.setDisplaySlot(DisplaySlot.SIDEBAR);
             scores.setDisplayName(ChatColor.RED.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Tags");
-            for(Player player:getPlayers()) {
+            for (Player player : getPlayers()) {
                 player.setScoreboard(scoreboard);
                 String name = (player.getName().equalsIgnoreCase(it)) ? ChatColor.RED + player.getName() : ChatColor.BLUE + player.getName();
-                if(name.length() >= 16) {
+                if (name.length() >= 16) {
                     name = name.substring(0, 15);
                 }
                 Score score = scores.getScore(Bukkit.getOfflinePlayer(name));

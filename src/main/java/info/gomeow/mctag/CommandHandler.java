@@ -125,6 +125,14 @@ public class CommandHandler implements CommandExecutor {
                                     } catch (IllegalArgumentException e) {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> tagbacks <true/false>");
                                     }
+                                } else if (args[2].equalsIgnoreCase("safeperiod")) {
+                                    try {
+                                        boolean bool = getBoolean(args[3]);
+                                        plugin.getData().set("maps." + name + ".safeperiod", bool);
+                                        plugin.saveData();
+                                    } catch (IllegalArgumentException e) {
+                                        sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> safeperiod <true/false>");
+                                    }
                                 } else {
                                     sender.sendMessage(ChatColor.RED + "That is not a valid command!");
                                 }
