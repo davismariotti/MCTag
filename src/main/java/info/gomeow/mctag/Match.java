@@ -1,5 +1,6 @@
 package info.gomeow.mctag;
 
+import info.gomeow.mctag.util.Equip;
 import info.gomeow.mctag.util.State;
 
 import java.util.HashMap;
@@ -144,15 +145,6 @@ public class Match {
 
     public void startGame() {
         state = State.INGAME;
-        for (Player player : getPlayers()) {
-            Manager.saveInventory(player);
-            player.setHealth(player.getMaxHealth());
-            player.setFoodLevel(20);
-            removePotionEffects(player);
-            // TODO Equip
-            player.setHealth(player.getMaxHealth());
-        }
-        // TODO safe time
         int item = rand.nextInt(players.size());
         int i = 0;
         for (String name : players.keySet()) {
@@ -161,6 +153,20 @@ public class Match {
             }
             i++;
         }
+        for (Player player : getPlayers()) {
+            Manager.saveInventory(player);
+            player.setHealth(player.getMaxHealth());
+            player.setFoodLevel(20);
+            removePotionEffects(player);
+            if(player.getName().equalsIgnoreCase(it)) {
+                Equip.equipIt(player);
+            } else {
+                Equip.equipOther(player);
+            }
+            player.setHealth(player.getMaxHealth());
+        }
+        // TODO safe time
+
         endRun = new BukkitRunnable() {
 
             public void run() {
