@@ -33,7 +33,7 @@ public class MCTag extends JavaPlugin {
     public void onDisable() {
         for (Match match : manager.getMatches()) {
             match.broadcast(ChatColor.DARK_RED + "Match Interrupted by Server Stop/Reload");
-            match.reset();
+            match.reset(true);
         }
     }
 

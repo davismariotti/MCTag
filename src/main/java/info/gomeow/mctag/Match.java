@@ -206,16 +206,15 @@ public class Match {
         endRun = new BukkitRunnable() {
 
             public void run() {
-                endGame();
+                reset(false);
             }
         };
     }
 
-    public void endGame() {
-        // TODO Send ending message
-    }
-
-    public void reset() {
+    public void reset(boolean hard) {
+        if(!hard) {
+            // TODO Stats
+        }
         starting = false;
         if (state == State.INGAME) {
             state = State.LOBBY;
