@@ -48,9 +48,9 @@ public class Match {
 
     boolean safe = false; // TODO Make configurable
 
-    private final ScoreboardManager scoreboardManager;
-    private Scoreboard scoreboard;
-    private Objective scores;
+    final ScoreboardManager scoreboardManager;
+    Scoreboard scoreboard;
+    Objective scores;
 
     public Match(String n, ConfigurationSection section) {
         scoreboardManager = Bukkit.getScoreboardManager();
