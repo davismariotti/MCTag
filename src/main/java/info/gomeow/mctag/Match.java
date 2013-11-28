@@ -38,6 +38,8 @@ public class Match {
     Location itspawn;
     Location regularspawn;
 
+    boolean safe = false; // TODO Make configurable
+
     public Match(String n, ConfigurationSection section) {
         name = n;
         config = section;
@@ -158,14 +160,20 @@ public class Match {
             player.setHealth(player.getMaxHealth());
             player.setFoodLevel(20);
             removePotionEffects(player);
-            if(player.getName().equalsIgnoreCase(it)) {
+            if (player.getName().equalsIgnoreCase(it)) {
                 Equip.equipIt(player);
             } else {
                 Equip.equipOther(player);
             }
             player.setHealth(player.getMaxHealth());
         }
-        // TODO safe time
+        safe = true;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                safe = false;
+            }
+        }.runTaskLater(MCTag.instance, 400L); // TODO Make configurable
 
         endRun = new BukkitRunnable() {
 

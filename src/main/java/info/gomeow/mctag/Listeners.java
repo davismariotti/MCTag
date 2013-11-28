@@ -41,8 +41,12 @@ public class Listeners implements Listener {
         if ((match != null) && (match.equals(plugin.getManager().getMatch(tagged)))) {
             // TODO Add config option to configure protecting players
             event.setCancelled(true);
-            if (match.getIT().equals(tagger.getName())) {
-                match.tag(tagger, tagged);
+            if (!match.safe) {
+                if (match.getIT().equals(tagger.getName())) {
+                    match.tag(tagger, tagged);
+                }
+            } else {
+                tagger.sendMessage(ChatColor.RED + "Please wait until the safe period is over.");
             }
         }
     }
