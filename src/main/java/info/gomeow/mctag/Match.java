@@ -31,7 +31,8 @@ public class Match {
 
     int minSize = 2;
 
-    String it;
+    String it = "";
+    String lastIt = "";
 
     Random rand = new Random();
 
@@ -99,6 +100,7 @@ public class Match {
         Equip.equipIt(tagged);
         Equip.equipOther(tagger);
         it = tagged.getName();
+        lastIt = tagger.getName();
     }
 
     public int givePoint(Player player) {

@@ -42,8 +42,12 @@ public class Listeners implements Listener {
             // TODO Add config option to configure protecting players
             event.setCancelled(true);
             if (!match.safe) {
-                if (match.getIT().equals(tagger.getName())) {
-                    match.tag(tagger, tagged);
+                if (!match.config.getBoolean("tagbacks", true) && tagged.getName().equalsIgnoreCase(match.lastIt)) {
+                    if (match.getIT().equals(tagger.getName())) {
+                        match.tag(tagger, tagged);
+                    }
+                } else {
+                    tagger.sendMessage(ChatColor.RED + "That player was just IT, no tagbacks!");
                 }
             } else {
                 tagger.sendMessage(ChatColor.RED + "Please wait until the safe period is over.");

@@ -103,6 +103,29 @@ public class CommandHandler implements CommandExecutor {
                     } else {
                         sender.sendMessage(ChatColor.RED + "You don't have permission to do that!");
                     }
+                } else if (args[0].equalsIgnoreCase("set")) {
+                    if (sender.hasPermission("mctag.set")) {
+                        if (args.length >= 4) {
+                            String name = args[1];
+                            if (Manager.mapExists(name)) {
+                                if (args[2].equalsIgnoreCase("tagbacks")) {
+                                    try {
+                                        boolean bool = getBoolean(args[3]);
+                                        plugin.getData().set("maps." + name + ".tagbacks", bool);
+                                        plugin.saveData();
+                                    } catch (IllegalArgumentException e) {
+                                       sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> tagbacks <true/false>");
+                                    }
+                                } else {
+                                    sender.sendMessage(ChatColor.RED + "That is not a valid command!");
+                                }
+                            } else {
+                                sender.sendMessage(ChatColor.RED + "That match doesn't exist!");
+                            }
+                        }
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "You don't have permission to do that!");
+                    }
                 } else {
                     sender.sendMessage(ChatColor.RED + "That is not a valid command!");
                 }
@@ -122,5 +145,15 @@ public class CommandHandler implements CommandExecutor {
             }
         }
         return true;
+    }
+
+    public boolean getBoolean(String arg) throws IllegalArgumentException {
+        if (arg.equalsIgnoreCase("true")) {
+            return true;
+        } else if (arg.equalsIgnoreCase("false")) {
+            return false;
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 }
