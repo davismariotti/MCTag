@@ -43,8 +43,7 @@ public class Match {
 
     Random rand = new Random();
 
-    Location itspawn;
-    Location regularspawn;
+    Location spawn;
 
     boolean safe = false; // TODO Make configurable
 
@@ -59,8 +58,7 @@ public class Match {
         scoreboardManager = Bukkit.getScoreboardManager();
         name = n;
         config = section;
-        itspawn = Manager.getLocation(config.getString("itspawn"));
-        regularspawn = Manager.getLocation(config.getString("regularspawn"));
+        spawn = Manager.getLocation(config.getString("spawn"));
         safeperiod = config.getBoolean("safeperiod", true);
         safeperiod = config.getBoolean("tagbacks", true);
     }

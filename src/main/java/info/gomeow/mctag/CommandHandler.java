@@ -111,8 +111,12 @@ public class CommandHandler implements CommandExecutor {
                                 Player player = (Player) sender;
                                 String name = args[1];
                                 if (Manager.mapExists(name)) {
+                                    Match match = plugin.manager.getMatch(name);
                                     plugin.getData().set("maps." + name + ".spawn", Manager.locToString(player.getLocation(), true));
                                     plugin.saveData();
+                                    if(match != null) {
+                                        match.spawn = player.getLocation();
+                                    }
                                 } else {
                                     sender.sendMessage(ChatColor.RED + "That match doesn't exist!");
                                 }
@@ -130,11 +134,15 @@ public class CommandHandler implements CommandExecutor {
                         if (args.length >= 4) {
                             String name = args[1];
                             if (Manager.mapExists(name)) {
+                                Match match = plugin.manager.getMatch(name);
                                 if (args[2].equalsIgnoreCase("mode")) {
                                     GameMode mode = GameMode.valueOf(args[3]);
                                     if (mode != null) {
                                         plugin.getData().set("maps." + name + ".mode", mode.toString());
                                         plugin.saveData();
+                                        if(match != null) {
+                                            match.mode = mode;
+                                        }
                                     } else {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> mode <normal/freeze>");
                                     }
@@ -143,6 +151,9 @@ public class CommandHandler implements CommandExecutor {
                                         boolean bool = getBoolean(args[3]);
                                         plugin.getData().set("maps." + name + ".tagbacks", bool);
                                         plugin.saveData();
+                                        if(match != null) {
+                                            match.tagbacks = bool;
+                                        }
                                     } catch (IllegalArgumentException e) {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> tagbacks <true/false>");
                                     }
@@ -151,6 +162,9 @@ public class CommandHandler implements CommandExecutor {
                                         boolean bool = getBoolean(args[3]);
                                         plugin.getData().set("maps." + name + ".safeperiod", bool);
                                         plugin.saveData();
+                                        if(match != null) {
+                                            match.safeperiod = bool;
+                                        }
                                     } catch (IllegalArgumentException e) {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> safeperiod <true/false>");
                                     }
