@@ -17,6 +17,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 public class Match {
 
@@ -43,7 +48,12 @@ public class Match {
 
     boolean safe = false; // TODO Make configurable
 
+    private final ScoreboardManager scoreboardManager;
+    private Scoreboard scoreboard;
+    private Objective scores;
+
     public Match(String n, ConfigurationSection section) {
+        scoreboardManager = Bukkit.getScoreboardManager();
         name = n;
         config = section;
         itspawn = Manager.getLocation(config.getString("itspawn"));
@@ -81,6 +91,7 @@ public class Match {
             player.teleport(MCTag.instance.getManager().getLobby());
             Manager.loadInventory(player);
         }
+        setupScoreboard();
     }
 
     public Set<Player> getPlayers() {
@@ -103,6 +114,7 @@ public class Match {
         Equip.equipOther(tagger);
         it = tagged.getName();
         lastIt = tagger.getName();
+        setupScoreboard();
     }
 
     public int givePoint(Player player) {
@@ -177,6 +189,7 @@ public class Match {
             player.setHealth(player.getMaxHealth());
         }
         safe = true;
+        setupScoreboard();
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -215,6 +228,24 @@ public class Match {
     public void removePotionEffects(Player player) {
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
+        }
+    }
+
+    public void setupScoreboard() {
+        if(state == State.INGAME) {
+            scoreboard = scoreboardManager.getNewScoreboard();
+            scores = scoreboard.registerNewObjective("Tags", "dummy");
+            scores.setDisplaySlot(DisplaySlot.SIDEBAR);
+            scores.setDisplayName(ChatColor.RED.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Tags");
+            for(Player player:getPlayers()) {
+                player.setScoreboard(scoreboard);
+                String name = (player.getName().equalsIgnoreCase(it)) ? ChatColor.RED + player.getName() : ChatColor.BLUE + player.getName();
+                if(name.length() >= 16) {
+                    name = name.substring(0, 15);
+                }
+                Score score = scores.getScore(Bukkit.getOfflinePlayer(name));
+                score.setScore(players.get(player.getName()));
+            }
         }
     }
 
