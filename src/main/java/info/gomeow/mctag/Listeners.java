@@ -39,7 +39,6 @@ public class Listeners implements Listener {
     public void tag(Player tagger, Player tagged, Cancellable event) {
         Match match = plugin.getManager().getMatch(tagger);
         if ((match != null) && (match.equals(plugin.getManager().getMatch(tagged)))) {
-            // TODO Add config option to configure protecting players
             event.setCancelled(true);
             if (!match.safe) {
                 if (!match.config.getBoolean("tagbacks", true) && tagged.getName().equalsIgnoreCase(match.lastIt)) {
