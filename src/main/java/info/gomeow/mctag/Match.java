@@ -51,7 +51,7 @@ public class Match {
     public void addPlayer(Player player) {
         players.put(player.getName(), 0);
         broadcast(ChatColor.GOLD + player.getName() + " has joined the match! (" + players.size() + " players in match)");
-        if(players.size() >= 2) { // TODO
+        if (players.size() >= 2) { // TODO
             countdown();
         }
     }
@@ -59,16 +59,16 @@ public class Match {
     public void removePlayer(Player player) {
         int temp = (state == State.INGAME) ? 0 : 1;
         players.remove(player.getName());
-        if(players.size() <= minSize) {
-            if(startRun != null) {
+        if (players.size() <= minSize) {
+            if (startRun != null) {
                 startRun.cancel();
             }
-            if((state == State.LOBBY && starting) || (state == State.INGAME)) {
+            if ((state == State.LOBBY && starting) || (state == State.INGAME)) {
                 broadcast(ChatColor.DARK_RED + "Not enough players to continue!");
             }
             starting = false;
         }
-        if(temp == 0) {
+        if (temp == 0) {
             player.setHealth(player.getMaxHealth());
             player.setFoodLevel(20);
             removePotionEffects(player);
@@ -79,7 +79,7 @@ public class Match {
 
     public Set<Player> getPlayers() {
         Set<Player> plys = new HashSet<Player>();
-        for(String name:players.keySet()) {
+        for (String name : players.keySet()) {
             plys.add(Bukkit.getPlayerExact(name));
         }
         return plys;
@@ -100,7 +100,7 @@ public class Match {
     }
 
     public void broadcast(String message) {
-        for(Player player:getPlayers()) {
+        for (Player player : getPlayers()) {
             player.sendMessage(message);
         }
     }
@@ -118,20 +118,20 @@ public class Match {
     }
 
     public void countdown() {
-        if(!starting) {
+        if (!starting) {
             starting = true;
             startRun = new BukkitRunnable() {
 
                 int time = 21;
 
                 public void run() {
-                    if(starting) {
+                    if (starting) {
                         time--;
-                        if(time <= 0) {
+                        if (time <= 0) {
                             startGame();
                             cancel();
-                        } else if((time % 5 == 0) || (time <= 5)) {
-                            broadcast(ChatColor.AQUA + "Match starting in " + time + " seconds");
+                        } else if ((time % 5 == 0) || (time <= 5)) {
+                            broadcast(ChatColor.AQUA + "Match starting in " + time + " seconds.");
                         }
                     } else {
                         cancel();
@@ -144,7 +144,7 @@ public class Match {
 
     public void startGame() {
         state = State.INGAME;
-        for(Player player:getPlayers()) {
+        for (Player player : getPlayers()) {
             Manager.saveInventory(player);
             player.setHealth(player.getMaxHealth());
             player.setFoodLevel(20);
@@ -155,8 +155,8 @@ public class Match {
         // TODO safe time
         int item = rand.nextInt(players.size());
         int i = 0;
-        for(String name:players.keySet()) {
-            if(i == item) {
+        for (String name : players.keySet()) {
+            if (i == item) {
                 it = name;
             }
             i++;
@@ -175,9 +175,9 @@ public class Match {
 
     public void reset() {
         starting = false;
-        if(state == State.INGAME) {
+        if (state == State.INGAME) {
             state = State.LOBBY;
-            for(Player player:getPlayers()) {
+            for (Player player : getPlayers()) {
                 player.setHealth(player.getMaxHealth());
                 player.setFoodLevel(20);
                 removePotionEffects(player);
@@ -190,7 +190,7 @@ public class Match {
     }
 
     public void removePotionEffects(Player player) {
-        for(PotionEffect effect:player.getActivePotionEffects()) {
+        for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
         }
     }

@@ -1,5 +1,7 @@
 package info.gomeow.mctag;
 
+import info.gomeow.mctag.util.Updater;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -8,8 +10,6 @@ import java.util.logging.Logger;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import info.gomeow.mctag.util.Updater;
 
 public class MCTag extends JavaPlugin {
 
@@ -27,6 +27,10 @@ public class MCTag extends JavaPlugin {
         instance = this;
         LOG = getLogger();
         manager = new Manager(this);
+    }
+
+    public void onDisable() {
+        // TODO Return inventories
     }
 
     public void loadData() {

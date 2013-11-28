@@ -20,15 +20,15 @@ public class Manager {
     Map<String, Match> matches = new HashMap<String, Match>();
 
     Location lobby;
-    
+
     static HashMap<String, InventoryData> inventories = new HashMap<String, InventoryData>();
 
     public Manager(MCTag mct) {
         plugin = mct;
-        if(plugin.getData().isConfigurationSection("maps")) {
-            for(String key:plugin.getData().getConfigurationSection("maps").getKeys(false)) {
+        if (plugin.getData().isConfigurationSection("maps")) {
+            for (String key : plugin.getData().getConfigurationSection("maps").getKeys(false)) {
                 ConfigurationSection section = plugin.getData().getConfigurationSection("maps." + key);
-                if(section.contains("itspawn") && section.contains("regularspawn")) {
+                if (section.contains("itspawn") && section.contains("regularspawn")) {
                     matches.put(key, new Match(key, section));
                     plugin.getLogger().info("Arena found: " + key); // TODO Remove debug
                 }
@@ -41,8 +41,8 @@ public class Manager {
     }
 
     public Match getMatch(Player player) {
-        for(Match match:matches.values()) {
-            if(match.containsPlayer(player)) {
+        for (Match match : matches.values()) {
+            if (match.containsPlayer(player)) {
                 return match;
             }
         }
@@ -87,14 +87,14 @@ public class Manager {
 
     public static String locToString(Location l, boolean pitchYaw) {
         String loc = l.getWorld().getName() + ";" + l.getX() + ";" + l.getY() + ";" + l.getZ();
-        if(pitchYaw) {
+        if (pitchYaw) {
             loc = loc + ";" + l.getY() + ";" + l.getPitch();
         }
         return loc;
     }
 
     public static boolean mapExists(String name) {
-        if(MCTag.instance.getData().isConfigurationSection("maps")) {
+        if (MCTag.instance.getData().isConfigurationSection("maps")) {
             return MCTag.instance.getData().getConfigurationSection("maps").contains(name);
         }
         return false;
@@ -103,7 +103,7 @@ public class Manager {
     public static void saveInventory(Player player) {
         inventories.put(player.getName(), new InventoryData(player.getInventory()));
         player.getInventory().clear();
-        player.getInventory().setArmorContents(new ItemStack[] {});
+        player.getInventory().setArmorContents(new ItemStack[]{});
     }
 
     public static void loadInventory(Player player) {
