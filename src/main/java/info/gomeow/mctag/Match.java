@@ -194,7 +194,7 @@ public class Match {
             starting = true;
             startRun = new BukkitRunnable() {
 
-                int time = 21;
+                int time = MCTag.instance.getConfig().getInt("countdown-time", 20) + 1;
 
                 public void run() {
                     if (starting) {
