@@ -104,6 +104,27 @@ public class CommandHandler implements CommandExecutor {
                     } else {
                         sender.sendMessage(ChatColor.RED + "You don't have permission to do that!");
                     }
+                } else if (args[0].equalsIgnoreCase("setspawn")) {
+                    if (sender.hasPermission("mctag.admin")) {
+                        if (args.length == 2) {
+                            if (sender instanceof Player) {
+                                Player player = (Player) sender;
+                                String name = args[1];
+                                if (Manager.mapExists(name)) {
+                                    plugin.getData().set("maps." + name + ".spawn", Manager.locToString(player.getLocation(), true));
+                                    plugin.saveData();
+                                } else {
+                                    sender.sendMessage(ChatColor.RED + "That match doesn't exist!");
+                                }
+                            } else {
+                                sender.sendMessage(ChatColor.RED + "You must be a player to do that!");
+                            }
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "Usage: /" + label + " setspawn <match>");
+                        }
+                    } else {
+                        sender.sendMessage(ChatColor.RED + "You don't have permission to do that!");
+                    }
                 } else if (args[0].equalsIgnoreCase("set")) {
                     if (sender.hasPermission("mctag.admin")) {
                         if (args.length >= 4) {
