@@ -77,9 +77,6 @@ public class MCTag extends JavaPlugin {
             public void run() {
                 if (getConfig().getBoolean("check-update")) {
                     Updater updater = new Updater(MCTag.instance, 40098, getFile(), Updater.UpdateType.DEFAULT, true);
-                    if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE) {
-                        getLogger().info("New version available! " + updater.getLatestName());
-                    }
                 }
             }
         }.runTaskAsynchronously(this);
