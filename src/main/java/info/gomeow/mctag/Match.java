@@ -93,7 +93,12 @@ public class Match {
     }
 
     public void tag(Player tagger, Player tagged) {
-
+        int tags = players.get(tagger.getName());
+        tags++;
+        players.put(tagger.getName(), tags);
+        Equip.equipIt(tagged);
+        Equip.equipOther(tagger);
+        it = tagged.getName();
     }
 
     public int givePoint(Player player) {
