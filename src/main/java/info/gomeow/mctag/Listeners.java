@@ -98,7 +98,7 @@ public class Listeners implements Listener {
     @EventHandler
     public void onSignChange(SignChangeEvent event) {
         if (event.getLine(0).equals("[Join]")) {
-            String name = event.getLine(1);
+            String name = event.getLine(1).toLowerCase();
             if (Manager.mapExists(name)) {
                 Location location = event.getBlock().getLocation();
                 String loc = Manager.locToString(location, false);
@@ -124,7 +124,7 @@ public class Listeners implements Listener {
             if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
                 Sign sign = (Sign) block.getState();
                 if (ChatColor.stripColor(sign.getLine(0)).equalsIgnoreCase("[Join]")) {
-                    String name = ChatColor.stripColor(sign.getLine(1));
+                    String name = ChatColor.stripColor(sign.getLine(1)).toLowerCase();
                     if (!name.equalsIgnoreCase("")) {
                         Match match = plugin.getManager().getMatch(name);
                         if (match != null) {
@@ -152,7 +152,7 @@ public class Listeners implements Listener {
         if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
             Sign sign = (Sign) block.getState();
             if (ChatColor.stripColor(sign.getLine(0)).equalsIgnoreCase("[Join]")) {
-                String name = ChatColor.stripColor(sign.getLine(1));
+                String name = ChatColor.stripColor(sign.getLine(1)).toLowerCase();
                 if (!name.equalsIgnoreCase("")) {
                     if (Manager.mapExists(name)) {
                         String loc = Manager.locToString(location, false);

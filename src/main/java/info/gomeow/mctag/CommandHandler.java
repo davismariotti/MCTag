@@ -109,7 +109,7 @@ public class CommandHandler implements CommandExecutor {
                         if (args.length == 2) {
                             if (sender instanceof Player) {
                                 Player player = (Player) sender;
-                                String name = args[1];
+                                String name = args[1].toLowerCase();
                                 if (Manager.mapExists(name)) {
                                     Match match = plugin.manager.getMatch(name);
                                     plugin.getData().set("maps." + name + ".spawn", Manager.locToString(player.getLocation(), true));
@@ -132,7 +132,7 @@ public class CommandHandler implements CommandExecutor {
                 } else if (args[0].equalsIgnoreCase("set")) {
                     if (sender.hasPermission("mctag.admin")) {
                         if (args.length >= 4) {
-                            String name = args[1];
+                            String name = args[1].toLowerCase();
                             if (Manager.mapExists(name)) {
                                 Match match = plugin.manager.getMatch(name);
                                 if (args[2].equalsIgnoreCase("mode")) {
