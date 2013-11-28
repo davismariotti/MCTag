@@ -24,6 +24,7 @@ public class MCTag extends JavaPlugin {
     public void onEnable() {
         instance = this;
         manager = new Manager(this);
+        getServer().getPluginManager().registerEvents(new Listeners(this), this);
         checkUpdate();
     }
 
