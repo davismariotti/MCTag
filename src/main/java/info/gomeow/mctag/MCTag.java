@@ -4,7 +4,6 @@ import info.gomeow.mctag.util.Updater;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,7 +13,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class MCTag extends JavaPlugin {
 
     static MCTag instance;
-    static Logger LOG;
     public static boolean UPDATE = false;
     public static String NEWVERSION = "";
     public static String LINK = "";
@@ -25,7 +23,6 @@ public class MCTag extends JavaPlugin {
 
     public void onEnable() {
         instance = this;
-        LOG = getLogger();
         manager = new Manager(this);
         checkUpdate();
     }
