@@ -19,7 +19,7 @@ public class CommandHandler implements CommandExecutor {
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (cmd.getName().equalsIgnoreCase("mctag")) {
+        if (cmd.getName().equalsIgnoreCase("tag")) {
             if (args.length == 0) {
                 sender.sendMessage(ChatColor.GOLD + " -- MCTag Help -- ");
                 sender.sendMessage(ChatColor.GOLD + "/" + label + " join <match> - Joins a match.");
