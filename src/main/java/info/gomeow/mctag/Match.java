@@ -71,7 +71,7 @@ public class Match {
     public void addPlayer(Player player) {
         players.put(player.getName(), 0);
         broadcast(ChatColor.GOLD + player.getName() + " has joined the match! (" + players.size() + " players in match)");
-        if (players.size() >= 2) { // TODO
+        if (players.size() >= MCTag.instance.getConfig().getInt("minimum-players", 4)) {
             countdown();
         }
     }
@@ -212,7 +212,7 @@ public class Match {
     }
 
     public void reset(boolean hard) {
-        if(!hard) {
+        if (!hard) {
             // TODO Stats
         }
         starting = false;

@@ -2,3 +2,5 @@
 check-update: true
 # Should players be able to use commands in game? (mctag.bypass to bypass this)
 block-commands: true
+# How many players should be required until the game starts?
+minimum-players: 4
