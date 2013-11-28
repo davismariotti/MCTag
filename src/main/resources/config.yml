@@ -1,2 +1,4 @@
 # Whether or not you want to check for updates.
 check-update: true
+# Should players be able to use commands in game? (mctag.bypass to bypass this)
+block-commands: true

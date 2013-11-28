@@ -1,5 +1,7 @@
 package info.gomeow.mctag;
 
+import info.gomeow.mctag.util.State;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -7,6 +9,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -60,6 +63,24 @@ public class Listeners implements Listener {
         if (player.isOp() && MCTag.UPDATE) {
             player.sendMessage(ChatColor.GREEN + "Version " + MCTag.NEWVERSION + " of PlayerVaults is up for download!");
             player.sendMessage(ChatColor.GREEN + MCTag.LINK + " to view the changelog and download!");
+        }
+    }
+
+    @EventHandler
+    public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        if (plugin.getConfig().getBoolean("block-commands", true)) {
+            Player player = event.getPlayer();
+            Match match = plugin.getManager().getMatch(player);
+            if (match != null) {
+                if (match.state == State.INGAME) {
+                    if (!player.hasPermission("mctag.bypass")) {
+                        if (!event.getMessage().toLowerCase().startsWith("/leave")) {
+                            event.setCancelled(true);
+                            player.sendMessage(ChatColor.DARK_RED + "You cannot use commands ingame. Please use /leave if you need to leave.");
+                        }
+                    }
+                }
+            }
         }
     }
 
