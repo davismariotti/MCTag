@@ -254,6 +254,7 @@ public class Match {
                 reset(false);
             }
         };
+        endRun.runTaskLater(MCTag.instance, MCTag.instance.getConfig().getLong("match-duration", 20L) * 20);
     }
 
     public void reset(boolean hard) {
