@@ -245,7 +245,7 @@ public class Match {
                 public void run() {
                     safe = false;
                 }
-            }.runTaskLater(MCTag.instance, 400L); // TODO Make configurable
+            }.runTaskLater(MCTag.instance, MCTag.instance.getConfig().getLong("safe-period-time", 20L) * 20);
         }
 
         endRun = new BukkitRunnable() {

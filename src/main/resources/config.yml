@@ -6,3 +6,5 @@ block-commands: true
 minimum-players: 4
 # Countdown time, in seconds
 countdown-time: 20
+# Safe period time, in seconds
+safe-period-time: 20
