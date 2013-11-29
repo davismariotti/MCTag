@@ -88,7 +88,7 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onSignChange(SignChangeEvent event) {
-        if (event.getLine(0).equals("[Join]")) {
+        if (event.getLine(0).equalsIgnoreCase("[Join]")) {
             String name = event.getLine(1).toLowerCase();
             if (Manager.mapExists(name)) {
                 Location location = event.getBlock().getLocation();
