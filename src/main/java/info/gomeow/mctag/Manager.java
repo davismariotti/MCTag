@@ -34,7 +34,7 @@ public class Manager {
         if (plugin.getData().isConfigurationSection("maps")) {
             for (String key : plugin.getData().getConfigurationSection("maps").getKeys(false)) {
                 ConfigurationSection section = plugin.getData().getConfigurationSection("maps." + key);
-                if (section.contains("itspawn") && section.contains("regularspawn")) {
+                if (section.contains("spawn")) {
                     matches.put(key, new Match(key, section));
                     plugin.getLogger().info("Arena found: " + key); // TODO Remove debug
                 }
