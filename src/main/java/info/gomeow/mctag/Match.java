@@ -57,9 +57,9 @@ public class Match {
     Objective scores;
 
     public Match(String n, ConfigurationSection section) {
+        name = n;
         d("Initializing.");
         scoreboardManager = Bukkit.getScoreboardManager();
-        name = n;
         config = section;
         spawn = Manager.getLocation(config.getString("spawn"));
         safeperiod = config.getBoolean("safeperiod", true);
