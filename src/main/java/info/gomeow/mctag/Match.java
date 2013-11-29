@@ -30,7 +30,6 @@ public class Match {
     GameMode mode = GameMode.NORMAL;
     ConfigurationSection config;
     Map<String, Integer> players = new HashMap<String, Integer>(); // Name, tags
-    Set<String> frozen = new HashSet<String>();
     State state = State.LOBBY;
 
     BukkitRunnable startRun;
@@ -298,8 +297,6 @@ public class Match {
                 ChatColor color;
                 if (player.getName().equals(it)) {
                     color = ChatColor.RED;
-                } else if (frozen.contains(player.getName()) && mode == GameMode.FREEZE) {
-                    color = ChatColor.BLUE;
                 } else {
                     color = ChatColor.BLUE;
                 }
@@ -311,16 +308,6 @@ public class Match {
                 score.setScore(players.get(player.getName()));
             }
         }
-    }
-
-    public void freeze(Player player) {
-        player.setPassenger(player);
-        frozen.add(player.getName());
-    }
-
-    public void unfreeze(Player player) {
-        player.eject();
-        frozen.remove(player.getName());
     }
 
 }
