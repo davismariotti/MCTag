@@ -273,6 +273,7 @@ public class Match {
                 Equip.equipOther(player);
             }
             player.setHealth(player.getMaxHealth());
+            player.teleport(spawn);
         }
         setupScoreboard();
         if (safeperiod) {
