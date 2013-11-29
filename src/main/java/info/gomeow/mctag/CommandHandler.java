@@ -140,7 +140,7 @@ public class CommandHandler implements CommandExecutor {
                             if (Manager.mapExists(name)) {
                                 Match match = plugin.manager.getMatch(name);
                                 if (args[2].equalsIgnoreCase("mode")) {
-                                    GameMode mode = GameMode.valueOf(args[3]);
+                                    GameMode mode = GameMode.valueOf(args[3].toUpperCase());
                                     if (mode != null) {
                                         plugin.getData().set("maps." + name + ".mode", mode.toString());
                                         plugin.saveData();
