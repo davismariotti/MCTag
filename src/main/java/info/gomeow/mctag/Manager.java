@@ -25,6 +25,12 @@ public class Manager {
 
     public Manager(MCTag mct) {
         plugin = mct;
+        if(plugin.getData().contains("lobby")) {
+            lobby = Manager.getLocation(plugin.getData().getString("lobby"));
+        } else {
+            lobby = Bukkit.getWorlds().get(0).getSpawnLocation();
+        }
+        d("Lobby initialized: " + plugin.getData().getString("lobby"));
         if (plugin.getData().isConfigurationSection("maps")) {
             for (String key : plugin.getData().getConfigurationSection("maps").getKeys(false)) {
                 ConfigurationSection section = plugin.getData().getConfigurationSection("maps." + key);
