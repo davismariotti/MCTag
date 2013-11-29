@@ -1,7 +1,7 @@
 package info.gomeow.mctag;
 
 import info.gomeow.mctag.util.GameMode;
-import info.gomeow.mctag.util.State;
+import info.gomeow.mctag.util.GameState;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -87,7 +87,7 @@ public class CommandHandler implements CommandExecutor {
                                 String name = args[1].toLowerCase();
                                 Match match = plugin.getManager().getMatch(name);
                                 if (match != null) {
-                                    if (match.getState() == State.LOBBY) {
+                                    if (match.getState() == GameState.LOBBY) {
                                         match.addPlayer(player);
                                     } else {
                                         sender.sendMessage(ChatColor.RED + "That match is already in progress!");

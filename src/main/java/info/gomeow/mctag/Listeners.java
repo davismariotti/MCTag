@@ -1,6 +1,6 @@
 package info.gomeow.mctag;
 
-import info.gomeow.mctag.util.State;
+import info.gomeow.mctag.util.GameState;
 
 import java.util.List;
 
@@ -72,7 +72,7 @@ public class Listeners implements Listener {
             Player player = event.getPlayer();
             Match match = plugin.getManager().getMatch(player);
             if (match != null) {
-                if (match.state == State.INGAME) {
+                if (match.state == GameState.INGAME) {
                     if (!player.hasPermission("mctag.bypass")) {
                         if (!event.getMessage().toLowerCase().startsWith("/leave")) {
                             event.setCancelled(true);
@@ -120,7 +120,7 @@ public class Listeners implements Listener {
                         if (match != null) {
                             event.setCancelled(true);
                             if (!match.isFull()) {
-                                if (match.getState() == State.LOBBY) {
+                                if (match.getState() == GameState.LOBBY) {
                                     if (plugin.getManager().getMatch(player) != null && plugin.getManager().getMatch(player) != match) {
                                         plugin.getManager().getMatch(player).removePlayer(player);
                                     }

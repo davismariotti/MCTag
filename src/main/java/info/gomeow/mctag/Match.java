@@ -2,7 +2,7 @@ package info.gomeow.mctag;
 
 import info.gomeow.mctag.util.Equip;
 import info.gomeow.mctag.util.GameMode;
-import info.gomeow.mctag.util.State;
+import info.gomeow.mctag.util.GameState;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,7 +30,7 @@ public class Match {
     GameMode mode = GameMode.NORMAL;
     ConfigurationSection config;
     Map<String, Integer> players = new HashMap<String, Integer>(); // Name, tags
-    State state = State.LOBBY;
+    GameState state = GameState.LOBBY;
 
     BukkitRunnable startRun;
     boolean starting = false;
@@ -104,7 +104,7 @@ public class Match {
             sign.setLine(0, ChatColor.YELLOW + "[Join]");
             sign.setLine(1, ChatColor.BOLD + name);
             sign.setLine(2, ChatColor.BLACK + "" + players.size() + " players");
-            sign.setLine(3, (state == State.LOBBY) ? ChatColor.GREEN + "In Lobby" : ChatColor.DARK_RED + "In Game");
+            sign.setLine(3, (state == GameState.LOBBY) ? ChatColor.GREEN + "In Lobby" : ChatColor.DARK_RED + "In Game");
             sign.update();
         }
     }
@@ -119,13 +119,13 @@ public class Match {
     }
 
     public void removePlayer(Player player) {
-        int temp = (state == State.INGAME) ? 0 : 1;
+        int temp = (state == GameState.INGAME) ? 0 : 1;
         players.remove(player.getName());
         if (players.size() <= minSize) {
             if (startRun != null) {
                 startRun.cancel();
             }
-            if ((state == State.LOBBY && starting) || (state == State.INGAME)) {
+            if ((state == GameState.LOBBY && starting) || (state == GameState.INGAME)) {
                 broadcast(ChatColor.DARK_RED + "Not enough players to continue!");
             }
             starting = false;
@@ -188,7 +188,7 @@ public class Match {
         return players.containsKey(player.getName());
     }
 
-    public State getState() {
+    public GameState getState() {
         return state;
     }
 
@@ -218,7 +218,7 @@ public class Match {
     }
 
     public void startGame() {
-        state = State.INGAME;
+        state = GameState.INGAME;
         updateSigns();
         int item = rand.nextInt(players.size());
         int i = 0;
@@ -265,8 +265,8 @@ public class Match {
             // TODO Stats
         }
         starting = false;
-        if (state == State.INGAME) {
-            state = State.LOBBY;
+        if (state == GameState.INGAME) {
+            state = GameState.LOBBY;
             for (Player player : getPlayers()) {
                 player.setHealth(player.getMaxHealth());
                 player.setFoodLevel(20);
@@ -287,7 +287,7 @@ public class Match {
     }
 
     public void setupScoreboard() {
-        if (state == State.INGAME) {
+        if (state == GameState.INGAME) {
             scoreboard = scoreboardManager.getNewScoreboard();
             scores = scoreboard.registerNewObjective("Tags", "dummy");
             scores.setDisplaySlot(DisplaySlot.SIDEBAR);

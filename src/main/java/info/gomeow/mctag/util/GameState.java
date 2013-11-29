@@ -1,5 +1,5 @@
 package info.gomeow.mctag.util;
 
-public enum State {
+public enum GameState {
     LOBBY, INGAME;
 }
