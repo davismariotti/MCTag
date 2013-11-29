@@ -71,12 +71,13 @@ public class CommandHandler implements CommandExecutor {
                     if (sender.hasPermission("mctag.admin")) {
                         if (sender instanceof Player) {
                             Player player = (Player) sender;
-                            Location l = player.getLocation();
-                            plugin.getManager().setLobby(l);
-                            String loc = l.getWorld().getName() + ";" + l.getX() + ";" + l.getY() + ";" + l.getZ() + ";" + l.getYaw() + ";" + l.getPitch();
+                            Location location = player.getLocation();
+                            plugin.getManager().setLobby(location);
+                            String loc = Manager.locToString(location, true);
                             plugin.getData().set("lobby", loc);
                             plugin.saveData();
-                            player.sendMessage(ChatColor.GREEN + "Lobby set!");
+                            plugin.getManager().lobby = location;
+                            player.sendMessage(ChatColor.GREEN + "Lobby set: " + loc);
                             d("Lobby set: " + loc);
                         } else {
                             sender.sendMessage(ChatColor.RED + "You must be a player to do that!");
