@@ -57,6 +57,7 @@ public class CommandHandler implements CommandExecutor {
                                 plugin.saveData();
                                 sender.sendMessage(ChatColor.GREEN + "Match Deleted!");
                                 d("Match deleted: " + name);
+                                // TODO Remove match ties
                             } else {
                                 sender.sendMessage(ChatColor.RED + "That match doesn't exist!");
                             }
