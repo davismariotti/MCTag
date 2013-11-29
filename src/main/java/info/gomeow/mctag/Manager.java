@@ -30,7 +30,7 @@ public class Manager {
         } else {
             lobby = Bukkit.getWorlds().get(0).getSpawnLocation();
         }
-        d("Lobby initialized: " + plugin.getData().getString("lobby"));
+        d("Lobby initialized: " + Manager.locToString(lobby, true));
         if (plugin.getData().isConfigurationSection("maps")) {
             for (String key : plugin.getData().getConfigurationSection("maps").getKeys(false)) {
                 ConfigurationSection section = plugin.getData().getConfigurationSection("maps." + key);
