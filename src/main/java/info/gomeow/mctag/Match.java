@@ -137,10 +137,27 @@ public class Match {
     }
 
     public void removePlayer(Player player) {
+        if(player.getName().equalsIgnoreCase(it)) {
+            int item = rand.nextInt(players.size());
+            int i = 0;
+            for (String name : players.keySet()) {
+                if (i == item) {
+                    it = name;
+                }
+                i++;
+            }
+            broadcast(ChatColor.GOLD + it + " is now IT!");
+            Equip.equipIt(Bukkit.getPlayerExact(it));
+            lastIt = player.getName();
+            d("Selected IT: " + it); // TODO
+            d("Old IT: " + lastIt);
+            setupScoreboard();
+        }
         d("Removing player: " + player.getName());
+        // TODO Announce
         int temp = (state == GameState.INGAME) ? 0 : 1;
         players.remove(player.getName());
-        if (players.size() <= minSize) {
+        if (players.size() <= minSize - 1) {
             d("Not enough players to continue.");
             if (startRun != null) {
                 startRun.cancel();
@@ -158,6 +175,7 @@ public class Match {
             removePotionEffects(player);
             player.teleport(MCTag.instance.getManager().getLobby());
             Manager.loadInventory(player);
+            player.setScoreboard(scoreboardManager.getNewScoreboard());
         }
         setupScoreboard();
         updateSigns();
@@ -176,6 +194,7 @@ public class Match {
     }
 
     public void tag(Player tagger, Player tagged) {
+        broadcast(ChatColor.GOLD + tagged.getName() + " is now IT!");
         d(tagger.getName() + " tagged " + tagged.getName());
         int tags = players.get(tagger.getName());
         tags++;
@@ -312,6 +331,7 @@ public class Match {
                 removePotionEffects(player);
                 player.teleport(MCTag.instance.getManager().getLobby());
                 Manager.loadInventory(player);
+                player.setScoreboard(scoreboardManager.getNewScoreboard());
             }
             players.clear();
             it = null;

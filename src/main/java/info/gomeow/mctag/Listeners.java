@@ -21,6 +21,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class Listeners implements Listener {
 
@@ -28,6 +29,15 @@ public class Listeners implements Listener {
 
     public Listeners(MCTag mct) {
         plugin = mct;
+    }
+
+    @EventHandler
+    public void onLeave(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        Match match = plugin.getManager().getMatch(player);
+        if (match != null) {
+            match.removePlayer(player);
+        }
     }
 
     @EventHandler
@@ -53,12 +63,18 @@ public class Listeners implements Listener {
         if ((match != null) && (match.equals(plugin.getManager().getMatch(tagged)))) {
             event.setCancelled(true);
             if (!match.safe) {
-                if (!match.tagbacks && tagged.getName().equalsIgnoreCase(match.lastIt)) {
+                if (match.tagbacks) {
+                    if (!tagged.getName().equalsIgnoreCase(match.lastIt)) {
+                        if (match.getIT().equals(tagger.getName())) {
+                            match.tag(tagger, tagged);
+                        }
+                    } else {
+                        tagger.sendMessage(ChatColor.RED + "That player was just IT, no tagbacks!");
+                    }
+                } else {
                     if (match.getIT().equals(tagger.getName())) {
                         match.tag(tagger, tagged);
                     }
-                } else {
-                    tagger.sendMessage(ChatColor.RED + "That player was just IT, no tagbacks!");
                 }
             } else {
                 tagger.sendMessage(ChatColor.RED + "Please wait until the safe period is over.");
@@ -141,6 +157,17 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        Match match = plugin.getManager().getMatch(player);
+        if (match != null) {
+            if (match.state == GameState.INGAME) {
+                if (!player.hasPermission("mctag.bypass")) {
+                    event.setCancelled(true);
+                    player.sendMessage(ChatColor.DARK_RED + "You cannot break blocks ingame.");
+                    return;
+                }
+            }
+        }
         removeSign(event.getBlock());
     }
 
