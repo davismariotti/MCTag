@@ -27,6 +27,7 @@ public class CommandHandler implements CommandExecutor {
                 sender.sendMessage(ChatColor.GOLD + "/" + label + " setlobby - Sets the lobby.");
                 sender.sendMessage(ChatColor.GOLD + "/" + label + " create <match> - Creates a match.");
                 sender.sendMessage(ChatColor.GOLD + "/" + label + " delete <match> - Deletes a match.");
+                sender.sendMessage(ChatColor.GOLD + "/" + label + " setspawn <match> - Sets the spawn for a match.");
                 sender.sendMessage(ChatColor.GOLD + "/" + label + " set <match> <option> - Sets a match option.");
             } else {
                 if (args[0].equalsIgnoreCase("create")) {
@@ -181,6 +182,8 @@ public class CommandHandler implements CommandExecutor {
                             } else {
                                 sender.sendMessage(ChatColor.RED + "That match doesn't exist!");
                             }
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> <option> - Sets a match option.");
                         }
                     } else {
                         sender.sendMessage(ChatColor.RED + "You don't have permission to do that!");
