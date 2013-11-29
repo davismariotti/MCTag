@@ -77,6 +77,7 @@ public class Listeners implements Listener {
                         if (!event.getMessage().toLowerCase().startsWith("/leave")) {
                             event.setCancelled(true);
                             player.sendMessage(ChatColor.DARK_RED + "You cannot use commands ingame. Please use /leave if you need to leave.");
+                            d("Blocked command by " + player.getName() + " (" + event.getMessage() + ")");
                         }
                     }
                 }
@@ -171,4 +172,9 @@ public class Listeners implements Listener {
         }
     }
 
+    public static void d(Object o) { // Debug
+        if (MCTag.instance.getConfig().getBoolean("debug-mode", false)) {
+            MCTag.instance.getLogger().info(o.toString());
+        }
+    }
 }

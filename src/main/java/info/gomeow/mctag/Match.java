@@ -57,12 +57,16 @@ public class Match {
     Objective scores;
 
     public Match(String n, ConfigurationSection section) {
+        d("Initializing.");
         scoreboardManager = Bukkit.getScoreboardManager();
         name = n;
         config = section;
         spawn = Manager.getLocation(config.getString("spawn"));
         safeperiod = config.getBoolean("safeperiod", true);
-        safeperiod = config.getBoolean("tagbacks", true);
+        tagbacks = config.getBoolean("tagbacks", true);
+        d("Spawn set: " + Manager.locToString(spawn, false));
+        d("Safe period: " + safeperiod);
+        d("Tagbacks: " + tagbacks);
         updateSigns();
     }
 
@@ -81,11 +85,13 @@ public class Match {
     }
 
     public void addSign(Location l) {
+        d("Adding sign.");
         signs.add(l);
         updateSigns();
     }
 
     public void removeSign(Location l) {
+        d("Removing sign.");
         signs.remove(l);
         updateSigns();
     }
@@ -100,37 +106,47 @@ public class Match {
     }
 
     public void updateSigns() {
+        d("Updating signs");
+        int debug = 0;
         for (Sign sign : getSigns()) {
+            debug++;
             sign.setLine(0, ChatColor.YELLOW + "[Join]");
             sign.setLine(1, ChatColor.BOLD + name);
             sign.setLine(2, ChatColor.BLACK + "" + players.size() + " players");
             sign.setLine(3, (state == GameState.LOBBY) ? ChatColor.GREEN + "In Lobby" : ChatColor.DARK_RED + "In Game");
             sign.update();
         }
+        d(debug + " sign(s) updated.");
     }
 
     public void addPlayer(Player player) {
+        d("Adding player: " + player.getName());
         players.put(player.getName(), 0);
         broadcast(ChatColor.GOLD + player.getName() + " has joined the match! (" + players.size() + " players in match)");
         if (players.size() >= MCTag.instance.getConfig().getInt("minimum-players", 4)) {
+            d("Reached minimum players.");
             countdown();
         }
         updateSigns();
     }
 
     public void removePlayer(Player player) {
+        d("Removing player: " + player.getName());
         int temp = (state == GameState.INGAME) ? 0 : 1;
         players.remove(player.getName());
         if (players.size() <= minSize) {
+            d("Not enough players to continue.");
             if (startRun != null) {
                 startRun.cancel();
             }
             if ((state == GameState.LOBBY && starting) || (state == GameState.INGAME)) {
                 broadcast(ChatColor.DARK_RED + "Not enough players to continue!");
+                reset(false);
             }
             starting = false;
         }
         if (temp == 0) {
+            d("Resetting player: " + player.getName());
             player.setHealth(player.getMaxHealth());
             player.setFoodLevel(20);
             removePotionEffects(player);
@@ -154,6 +170,7 @@ public class Match {
     }
 
     public void tag(Player tagger, Player tagged) {
+        d(tagger.getName() + " tagged " + tagged.getName());
         int tags = players.get(tagger.getName());
         tags++;
         players.put(tagger.getName(), tags);
@@ -161,16 +178,20 @@ public class Match {
         Equip.equipOther(tagger);
         it = tagged.getName();
         lastIt = tagger.getName();
+        d("Selected IT: " + it);
+        d("Old IT: " + lastIt);
         setupScoreboard();
     }
 
     public int givePoint(Player player) {
+        d("Giving point: " + player.getName());
         int current = players.get(player.getName()) + 1;
         players.put(player.getName(), current);
         return current;
     }
 
     public void broadcast(String message) {
+        d("Broadcasting: " + ChatColor.stripColor(message));
         for (Player player : getPlayers()) {
             player.sendMessage(message);
         }
@@ -194,6 +215,7 @@ public class Match {
 
     public void countdown() {
         if (!starting) {
+            d("Starting countdown.");
             starting = true;
             startRun = new BukkitRunnable() {
 
@@ -201,6 +223,7 @@ public class Match {
 
                 public void run() {
                     if (starting) {
+                        d("Countdown time: " + time);
                         time--;
                         if (time <= 0) {
                             startGame();
@@ -218,9 +241,11 @@ public class Match {
     }
 
     public void startGame() {
+        d("Starting game.");
         state = GameState.INGAME;
         updateSigns();
         int item = rand.nextInt(players.size());
+        d(item); // TODO
         int i = 0;
         for (String name : players.keySet()) {
             if (i == item) {
@@ -228,24 +253,29 @@ public class Match {
             }
             i++;
         }
+        d("Selected IT: " + it);
         for (Player player : getPlayers()) {
             Manager.saveInventory(player);
             player.setHealth(player.getMaxHealth());
             player.setFoodLevel(20);
             removePotionEffects(player);
             if (player.getName().equalsIgnoreCase(it)) {
+                d("Equipping IT: " + player.getName());
                 Equip.equipIt(player);
             } else {
+                d("Equipping other: " + player.getName());
                 Equip.equipOther(player);
             }
             player.setHealth(player.getMaxHealth());
         }
         setupScoreboard();
         if (safeperiod) {
+            d("Safe period active");
             safe = true;
             new BukkitRunnable() {
                 @Override
                 public void run() {
+                    d("Safe period no longer active.");
                     safe = false;
                 }
             }.runTaskLater(MCTag.instance, MCTag.instance.getConfig().getLong("safe-period-time", 20L) * 20);
@@ -254,6 +284,7 @@ public class Match {
         endRun = new BukkitRunnable() {
 
             public void run() {
+                d("Ending game.");
                 reset(false);
             }
         };
@@ -261,6 +292,7 @@ public class Match {
     }
 
     public void reset(boolean hard) {
+        d("Resetting, Hard: " + hard);
         if (!hard) {
             // TODO Stats
         }
@@ -281,12 +313,14 @@ public class Match {
     }
 
     public void removePotionEffects(Player player) {
+        d("Removing potion effects for " + player.getName());
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
         }
     }
 
     public void setupScoreboard() {
+        d("Setting up scoreboard.");
         if (state == GameState.INGAME) {
             scoreboard = scoreboardManager.getNewScoreboard();
             scores = scoreboard.registerNewObjective("Tags", "dummy");
@@ -300,6 +334,7 @@ public class Match {
                 } else {
                     color = ChatColor.BLUE;
                 }
+                d("Player: " + player.getName() + ", SB color: " + color.name());
                 String name = color + player.getName();
                 if (name.length() >= 16) {
                     name = name.substring(0, 15);
@@ -307,6 +342,12 @@ public class Match {
                 Score score = scores.getScore(Bukkit.getOfflinePlayer(name));
                 score.setScore(players.get(player.getName()));
             }
+        }
+    }
+
+    public void d(Object o) { // Debug
+        if (MCTag.instance.getConfig().getBoolean("debug-mode", false)) {
+            MCTag.instance.getLogger().info(name + ": " + o.toString());
         }
     }
 

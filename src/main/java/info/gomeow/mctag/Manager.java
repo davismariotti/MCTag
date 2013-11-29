@@ -119,17 +119,25 @@ public class Manager {
     }
 
     public static void saveInventory(Player player) {
+        d("Saving inventory: " + player.getName());
         inventories.put(player.getName(), new InventoryData(player.getInventory()));
         player.getInventory().clear();
         player.getInventory().setArmorContents(new ItemStack[]{});
     }
 
     public static void loadInventory(Player player) {
+        d("Loading inventory: " + player.getName());
         String name = player.getName();
         InventoryData i = inventories.get(name);
         inventories.remove(name);
         player.getInventory().setContents(i.getContents());
         player.getInventory().setArmorContents(i.getArmorContents());
+    }
+
+    public static void d(Object o) { // Debug
+        if (MCTag.instance.getConfig().getBoolean("debug-mode", false)) {
+            MCTag.instance.getLogger().info(o.toString());
+        }
     }
 
 }

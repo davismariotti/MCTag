@@ -37,6 +37,7 @@ public class CommandHandler implements CommandExecutor {
                                 plugin.getData().set("maps." + name + ".mode", "NORMAL");
                                 plugin.saveData();
                                 sender.sendMessage(ChatColor.GREEN + "Match created!");
+                                d("Match created: " + name);
                             } else {
                                 sender.sendMessage(ChatColor.RED + "That match already exists!");
                             }
@@ -54,6 +55,7 @@ public class CommandHandler implements CommandExecutor {
                                 plugin.getData().set("maps." + name, null);
                                 plugin.saveData();
                                 sender.sendMessage(ChatColor.GREEN + "Match Deleted!");
+                                d("Match deleted: " + name);
                             } else {
                                 sender.sendMessage(ChatColor.RED + "That match doesn't exist!");
                             }
@@ -73,6 +75,7 @@ public class CommandHandler implements CommandExecutor {
                             plugin.getData().set("lobby", loc);
                             plugin.saveData();
                             player.sendMessage(ChatColor.GREEN + "Lobby set!");
+                            d("Lobby set: " + loc);
                         } else {
                             sender.sendMessage(ChatColor.RED + "You must be a player to do that!");
                         }
@@ -114,9 +117,10 @@ public class CommandHandler implements CommandExecutor {
                                     Match match = plugin.manager.getMatch(name);
                                     plugin.getData().set("maps." + name + ".spawn", Manager.locToString(player.getLocation(), true));
                                     plugin.saveData();
-                                    if(match != null) {
+                                    if (match != null) {
                                         match.spawn = player.getLocation();
                                     }
+                                    d(name + ": Spawnpoint set: " + Manager.locToString(player.getLocation(), true));
                                 } else {
                                     sender.sendMessage(ChatColor.RED + "That match doesn't exist!");
                                 }
@@ -140,9 +144,10 @@ public class CommandHandler implements CommandExecutor {
                                     if (mode != null) {
                                         plugin.getData().set("maps." + name + ".mode", mode.toString());
                                         plugin.saveData();
-                                        if(match != null) {
+                                        if (match != null) {
                                             match.mode = mode;
                                         }
+                                        d(name + ": Mode set: " + mode.name());
                                     } else {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> mode <normal/freeze>");
                                     }
@@ -151,9 +156,10 @@ public class CommandHandler implements CommandExecutor {
                                         boolean bool = getBoolean(args[3]);
                                         plugin.getData().set("maps." + name + ".tagbacks", bool);
                                         plugin.saveData();
-                                        if(match != null) {
+                                        if (match != null) {
                                             match.tagbacks = bool;
                                         }
+                                        d(name + ": Tagbacks set: " + bool);
                                     } catch (IllegalArgumentException e) {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> tagbacks <true/false>");
                                     }
@@ -162,9 +168,10 @@ public class CommandHandler implements CommandExecutor {
                                         boolean bool = getBoolean(args[3]);
                                         plugin.getData().set("maps." + name + ".safeperiod", bool);
                                         plugin.saveData();
-                                        if(match != null) {
+                                        if (match != null) {
                                             match.safeperiod = bool;
                                         }
+                                        d(name + ": Safeperiod set: " + bool);
                                     } catch (IllegalArgumentException e) {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> safeperiod <true/false>");
                                     }
@@ -206,6 +213,12 @@ public class CommandHandler implements CommandExecutor {
             return false;
         } else {
             throw new IllegalArgumentException();
+        }
+    }
+
+    public static void d(Object o) { // Debug
+        if (MCTag.instance.getConfig().getBoolean("debug-mode", false)) {
+            MCTag.instance.getLogger().info(o.toString());
         }
     }
 }

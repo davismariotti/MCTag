@@ -19,20 +19,27 @@ public class MCTag extends JavaPlugin {
     YamlConfiguration data;
 
     public void onEnable() {
+        d("Enabling.");
         instance = this;
         manager = new Manager(this);
         getServer().getPluginManager().registerEvents(new Listeners(this), this);
+        saveDefaultConfig();
         checkUpdate();
     }
 
     public void onDisable() {
+        d("Disabling");
+        int debug = 0;
         for (Match match : manager.getMatches()) {
+            debug++;
             match.broadcast(ChatColor.DARK_RED + "Match Interrupted by Server Stop/Reload");
             match.reset(true);
         }
+        d(debug + " match(es) force stopped.");
     }
 
     public void loadData() {
+        d("Loading data.");
         File f = new File(getDataFolder(), "data.yml");
         if (!f.exists()) {
             try {
@@ -43,8 +50,6 @@ public class MCTag extends JavaPlugin {
         }
         dataFile = f;
         data = YamlConfiguration.loadConfiguration(f);
-        saveDefaultConfig();
-        checkUpdate();
     }
 
     public YamlConfiguration getData() {
@@ -52,6 +57,7 @@ public class MCTag extends JavaPlugin {
     }
 
     public void saveData() {
+        d("Saving data.");
         try {
             data.save(dataFile);
         } catch (IOException e) {
@@ -67,6 +73,7 @@ public class MCTag extends JavaPlugin {
      * Checks for available updates.
      */
     public void checkUpdate() {
+        d("Checking for updates.");
         new BukkitRunnable() {
 
             public void run() {
@@ -77,4 +84,9 @@ public class MCTag extends JavaPlugin {
         }.runTaskAsynchronously(this);
     }
 
+    public void d(Object o) { // Debug
+        if (getConfig().getBoolean("debug-mode", false)) {
+            getLogger().info(o.toString());
+        }
+    }
 }
