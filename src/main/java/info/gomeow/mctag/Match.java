@@ -127,7 +127,7 @@ public class Match {
 
     public void addPlayer(Player player) {
         d("Adding player: " + player.getName());
-        players.put(player.getName(), 0);
+        players.put(player.getName(), 1);
         broadcast(ChatColor.GOLD + player.getName() + " has joined the match! (" + players.size() + " players in match)");
         if (players.size() >= MCTag.instance.getConfig().getInt("minimum-players", 4)) {
             d("Reached minimum players.");
@@ -295,7 +295,7 @@ public class Match {
                 reset(false);
             }
         };
-        endRun.runTaskLater(MCTag.instance, MCTag.instance.getConfig().getLong("match-duration", 20L) * 20);
+        endRun.runTaskLater(MCTag.instance, MCTag.instance.getConfig().getLong("match-duration", 20L) * 400);
     }
 
     public void reset(boolean hard) {
