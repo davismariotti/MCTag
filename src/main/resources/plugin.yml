@@ -5,3 +5,5 @@ author: gomeow
 commands:
   tag:
     description: All MCTag commands
+  leave:
+    description: Leave the game

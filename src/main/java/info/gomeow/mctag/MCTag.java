@@ -26,6 +26,7 @@ public class MCTag extends JavaPlugin {
         manager = new Manager(this);
         getServer().getPluginManager().registerEvents(new Listeners(this), this);
         getCommand("tag").setExecutor(new CommandHandler(this));
+        getCommand("leave").setExecutor(new CommandHandler(this));
         checkUpdate();
     }
 
