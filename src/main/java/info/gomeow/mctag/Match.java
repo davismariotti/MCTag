@@ -64,9 +64,15 @@ public class Match {
         spawn = Manager.getLocation(config.getString("spawn"));
         safeperiod = config.getBoolean("safeperiod", true);
         tagbacks = config.getBoolean("tagbacks", true);
+        int debug = 0;
+        for (String s : config.getStringList("signs")) {
+            debug++;
+            signs.add(Manager.getLocation2(s));
+        }
         d("Spawn set: " + Manager.locToString(spawn, false));
         d("Safe period: " + safeperiod);
         d("Tagbacks: " + tagbacks);
+        d("Initialized " + debug + " sign(s).");
         updateSigns();
     }
 
