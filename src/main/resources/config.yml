@@ -3,6 +3,7 @@ check-update: true
 # Should players be able to use commands in game? (mctag.bypass to bypass this)
 block-commands: true
 # How many players should be required until the game starts?
+# ## If this is set to 2, then allowtagbacks must be set to true! ##
 minimum-players: 4
 # Countdown time, in seconds
 countdown-time: 20
