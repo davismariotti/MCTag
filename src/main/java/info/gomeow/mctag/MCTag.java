@@ -17,6 +17,8 @@ public class MCTag extends JavaPlugin {
     Manager manager;
     File dataFile;
     YamlConfiguration data;
+    File statsFile;
+    YamlConfiguration stats;
 
     public void onEnable() {
         d("Enabling.");
@@ -67,6 +69,34 @@ public class MCTag extends JavaPlugin {
             e.printStackTrace();
         }
     }
+
+    public void loadStats() {
+        d("Loading stats.");
+        File f = new File(getDataFolder(), "stats.yml");
+        if (!f.exists()) {
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        statsFile = f;
+        stats = YamlConfiguration.loadConfiguration(f);
+    }
+
+    public YamlConfiguration getStats() {
+        return stats;
+    }
+
+    public void saveStats() {
+        d("Saving stats.");
+        try {
+            stats.save(statsFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public Manager getManager() {
         return manager;
