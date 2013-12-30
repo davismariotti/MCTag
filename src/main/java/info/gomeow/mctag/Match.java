@@ -26,6 +26,8 @@ import org.bukkit.scoreboard.ScoreboardManager;
 
 public class Match {
 
+    MCTag plugin;
+
     String name;
     GameMode mode = GameMode.NORMAL;
     ConfigurationSection config;
@@ -57,6 +59,7 @@ public class Match {
     Objective scores;
 
     public Match(String n, ConfigurationSection section) {
+        plugin = MCTag.instance;
         name = n;
         d("Initializing.");
         scoreboardManager = Bukkit.getScoreboardManager();
@@ -129,7 +132,7 @@ public class Match {
         d("Adding player: " + player.getName());
         players.put(player.getName(), 1);
         broadcast(ChatColor.GOLD + player.getName() + " has joined the match! (" + players.size() + " players in match)");
-        if (players.size() >= MCTag.instance.getConfig().getInt("minimum-players", 4)) {
+        if (players.size() >= plugin.getConfig().getInt("minimum-players", 4)) {
             d("Reached minimum players.");
             countdown();
         }
@@ -173,7 +176,7 @@ public class Match {
             player.setHealth(player.getMaxHealth());
             player.setFoodLevel(20);
             removePotionEffects(player);
-            player.teleport(MCTag.instance.getManager().getLobby());
+            player.teleport(plugin.getManager().getLobby());
             Manager.loadInventory(player);
             player.setScoreboard(scoreboardManager.getNewScoreboard());
         }
@@ -245,7 +248,7 @@ public class Match {
             starting = true;
             startRun = new BukkitRunnable() {
 
-                int time = MCTag.instance.getConfig().getInt("countdown-time", 20) + 1;
+                int time = plugin.getConfig().getInt("countdown-time", 20) + 1;
 
                 public void run() {
                     if (starting) {
@@ -262,7 +265,7 @@ public class Match {
                     }
                 }
             };
-            startRun.runTaskTimer(MCTag.instance, 0L, 20L);
+            startRun.runTaskTimer(plugin, 0L, 20L);
         }
     }
 
@@ -305,7 +308,7 @@ public class Match {
                     d("Safe period no longer active.");
                     safe = false;
                 }
-            }.runTaskLater(MCTag.instance, MCTag.instance.getConfig().getLong("safe-period-time", 20L) * 20);
+            }.runTaskLater(plugin, plugin.getConfig().getLong("safe-period-time", 20L) * 20);
         }
 
         endRun = new BukkitRunnable() {
@@ -315,7 +318,7 @@ public class Match {
                 reset(false);
             }
         };
-        endRun.runTaskLater(MCTag.instance, MCTag.instance.getConfig().getLong("match-duration", 20L) * 400);
+        endRun.runTaskLater(plugin, plugin.getConfig().getLong("match-duration", 20L) * 400);
     }
 
     public void reset(boolean hard) {
@@ -330,7 +333,7 @@ public class Match {
                 player.setHealth(player.getMaxHealth());
                 player.setFoodLevel(20);
                 removePotionEffects(player);
-                player.teleport(MCTag.instance.getManager().getLobby());
+                player.teleport(plugin.getManager().getLobby());
                 Manager.loadInventory(player);
                 player.setScoreboard(scoreboardManager.getNewScoreboard());
             }
@@ -374,8 +377,8 @@ public class Match {
     }
 
     public void d(Object o) { // Debug
-        if (MCTag.instance.getConfig().getBoolean("debug-mode", false)) {
-            MCTag.instance.getLogger().info(name + ": " + o.toString());
+        if (plugin.getConfig().getBoolean("debug-mode", false)) {
+            plugin.getLogger().info(name + ": " + o.toString());
         }
     }
 
