@@ -159,12 +159,12 @@ public class Match {
             broadcast(ChatColor.GOLD + it + " is now IT!");
             Equip.equipIt(Bukkit.getPlayerExact(it));
             lastIt = player.getName();
-            d("Selected IT: " + it); // TODO
+            broadcast(ChatColor.GOLD + "Current IT has left. New selected IT: " + it);
+            d("Selected IT: " + it);
             d("Old IT: " + lastIt);
             setupScoreboard();
         }
         d("Removing player: " + player.getName());
-        // TODO Announce
         int temp = (state == GameState.INGAME) ? 0 : 1;
         players.remove(player.getName());
         if (players.size() <= minSize - 1) {
