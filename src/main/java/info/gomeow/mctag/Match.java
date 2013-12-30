@@ -281,7 +281,6 @@ public class Match {
         state = GameState.INGAME;
         updateSigns();
         int item = rand.nextInt(players.size());
-        d(item); // TODO
         int i = 0;
         for (String name : players.keySet()) {
             if (i == item) {
