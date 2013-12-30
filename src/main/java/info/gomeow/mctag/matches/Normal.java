@@ -343,6 +343,7 @@ public class Normal implements Match {
                 @Override
                 public void run() {
                     d("Safe period no longer active.");
+                    broadcast(ChatColor.GOLD + "Safe period no longer active.");
                     safe = false;
                 }
             }.runTaskLater(plugin, plugin.getConfig().getLong("safe-period-time", 20L) * 20);
