@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -25,7 +26,7 @@ public class Manager {
 
     public Manager(MCTag mct) {
         plugin = mct;
-        if(plugin.getData().contains("lobby")) {
+        if (plugin.getData().contains("lobby")) {
             lobby = Manager.getLocation(plugin.getData().getString("lobby"));
         } else {
             lobby = Bukkit.getWorlds().get(0).getSpawnLocation();
@@ -70,6 +71,12 @@ public class Manager {
 
     public void addMatch(Match match) {
         matches.put(match.getName(), match);
+    }
+
+    public void removeMatch(Match match) {
+        match.broadcast(ChatColor.DARK_RED + "Match stopped due to deletion.");
+        match.reset(true);
+        matches.remove(match);
     }
 
     public void setLobby(Location l) {
