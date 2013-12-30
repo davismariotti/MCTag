@@ -140,7 +140,7 @@ public class Match {
     }
 
     public void removePlayer(Player player) {
-        if(player.getName().equalsIgnoreCase(it)) {
+        if (player.getName().equalsIgnoreCase(it)) {
             int item = rand.nextInt(players.size());
             int i = 0;
             for (String name : players.keySet()) {
@@ -324,7 +324,29 @@ public class Match {
     public void reset(boolean hard) {
         d("Resetting, Hard: " + hard);
         if (!hard) {
-            // TODO Stats
+            String winner = "";
+            int t = 0;
+            for (Map.Entry<String, TagInfo> entry : players.entrySet()) {
+                int i = entry.getValue().getTags();
+                if (i > t) {
+                    winner = entry.getKey();
+                    t = i;
+                }
+            }
+            d("Winner: " + winner);
+            int wins = plugin.getStats().getInt(winner + ".wins", 0);
+            wins++;
+            plugin.getStats().set(winner + ".wins", wins);
+            for (Map.Entry<String, TagInfo> entry : players.entrySet()) {
+                int totalTags = plugin.getStats().getInt(entry.getKey() + ".tags", 0);
+                int totalTagged = plugin.getStats().getInt(entry.getKey() + ".tagged", 0);
+                totalTags = totalTags + entry.getValue().getTags();
+                totalTagged = totalTagged + entry.getValue().getTagged();
+                plugin.getStats().set(entry.getKey() + ".tags", totalTags);
+                plugin.getStats().set(entry.getKey() + ".tagged", totalTagged);
+            }
+            plugin.saveStats();
+            broadcast(ChatColor.GOLD + "Winner: " + winner + "!");
         }
         starting = false;
         if (state == GameState.INGAME) {
