@@ -25,13 +25,13 @@ public interface Match {
 
     public void setMode(GameMode mode);
 
-    public void setTagbacks(boolean bool);
+    public void setAllowtagbacks(boolean bool);
 
     public void setSafeperiod(boolean bool);
 
     public boolean isSafe();
 
-    public boolean isTagbacks();
+    public boolean isAllowtagbacks();
 
     public String getLastIt();
 

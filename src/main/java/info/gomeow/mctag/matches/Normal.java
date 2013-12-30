@@ -55,7 +55,7 @@ public class Normal implements Match {
     boolean safe = false;
 
     boolean safeperiod;
-    boolean tagbacks;
+    boolean allowtagbacks;
 
     final ScoreboardManager scoreboardManager;
     Scoreboard scoreboard;
@@ -69,7 +69,7 @@ public class Normal implements Match {
         config = section;
         spawn = Manager.getLocation(config.getString("spawn"));
         safeperiod = config.getBoolean("safeperiod", true);
-        tagbacks = config.getBoolean("tagbacks", true);
+        allowtagbacks = config.getBoolean("allowtagbacks", false);
         int debug = 0;
         for (String s : config.getStringList("signs")) {
             debug++;
@@ -77,7 +77,7 @@ public class Normal implements Match {
         }
         d("Spawn set: " + Manager.locToString(spawn, false));
         d("Safe period: " + safeperiod);
-        d("Tagbacks: " + tagbacks);
+        d("Allowtagbacks: " + allowtagbacks);
         d("Initialized " + debug + " sign(s).");
         updateSigns();
     }
@@ -132,8 +132,8 @@ public class Normal implements Match {
         this.mode = mode;
     }
 
-    public void setTagbacks(boolean bool) {
-        tagbacks = bool;
+    public void setAllowtagbacks(boolean bool) {
+        allowtagbacks = bool;
     }
 
     public void setSafeperiod(boolean bool) {
@@ -144,8 +144,8 @@ public class Normal implements Match {
         return safe;
     }
 
-    public boolean isTagbacks() {
-        return tagbacks;
+    public boolean isAllowtagbacks() {
+        return allowtagbacks;
     }
 
     public String getLastIt() {

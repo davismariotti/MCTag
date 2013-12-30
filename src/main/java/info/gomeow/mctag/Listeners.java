@@ -64,7 +64,7 @@ public class Listeners implements Listener {
         if ((match != null) && (match.equals(plugin.getManager().getMatch(tagged)))) {
             event.setCancelled(true);
             if (!match.isSafe()) {
-                if (match.isTagbacks()) {
+                if (!match.isAllowtagbacks()) {
                     if (!tagged.getName().equalsIgnoreCase(match.getLastIt())) {
                         if (match.getIT().equals(tagger.getName())) {
                             match.tag(tagger, tagged);

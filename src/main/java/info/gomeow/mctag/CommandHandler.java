@@ -162,18 +162,18 @@ public class CommandHandler implements CommandExecutor {
                                     } else {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> mode <normal/freeze>");
                                     }
-                                } else if (args[2].equalsIgnoreCase("tagbacks")) {
+                                } else if (args[2].equalsIgnoreCase("allowtagbacks")) {
                                     try {
                                         boolean bool = getBoolean(args[3]);
-                                        plugin.getData().set("maps." + name + ".tagbacks", bool);
+                                        plugin.getData().set("maps." + name + ".allowtagbacks", bool);
                                         plugin.saveData();
                                         if (match != null) {
-                                            match.setTagbacks(bool);
+                                            match.setAllowtagbacks(bool);
                                         }
-                                        sender.sendMessage(ChatColor.GREEN + "Tagbacks set!");
-                                        match.d("Tagbacks set: " + bool);
+                                        sender.sendMessage(ChatColor.GREEN + "Allowtagbacks set!");
+                                        match.d("Allowtagbacks set: " + bool);
                                     } catch (IllegalArgumentException e) {
-                                        sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> tagbacks <true/false>");
+                                        sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> allowtagbacks <true/false>");
                                     }
                                 } else if (args[2].equalsIgnoreCase("safeperiod")) {
                                     try {
