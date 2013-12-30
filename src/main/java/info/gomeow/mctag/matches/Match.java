@@ -37,8 +37,6 @@ public interface Match {
 
     public GameState getState();
 
-    public void updateSigns();
-
     public void addPlayer(Player player);
 
     public void removePlayer(Player player);
@@ -49,23 +47,15 @@ public interface Match {
 
     public void tag(Player tagger, Player tagged);
 
-    public int givePoint(Player player);
-
     public void broadcast(String message);
 
     public int getSize();
 
     public boolean containsPlayer(Player player);
 
-    //public void countdown();
-
-    //public void startGame();
-
     public void reset(boolean hard);
 
     public void removePotionEffects(Player player);
-
-    public void setupScoreboard();
 
     public void d(Object o);
 
