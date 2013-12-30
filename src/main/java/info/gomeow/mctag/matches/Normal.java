@@ -41,8 +41,11 @@ public class Normal implements Match {
     boolean starting = false;
 
     BukkitRunnable endRun;
+    BukkitRunnable xpRun;
 
     int minSize = 2;
+
+    long matchDuration;
 
     String it = "";
     String lastIt = "";
@@ -63,6 +66,7 @@ public class Normal implements Match {
 
     public Normal(String n, ConfigurationSection section) {
         plugin = MCTag.instance;
+        matchDuration = plugin.getConfig().getLong("match-duration", 60L) * 20L;
         name = n;
         d("Initializing.");
         scoreboardManager = Bukkit.getScoreboardManager();
@@ -346,7 +350,7 @@ public class Normal implements Match {
                     broadcast(ChatColor.GOLD + "Safe period no longer active.");
                     safe = false;
                 }
-            }.runTaskLater(plugin, plugin.getConfig().getLong("safe-period-time", 20L) * 20);
+            }.runTaskLater(plugin, plugin.getConfig().getLong("safe-period-time", 5L) * 20);
         }
 
         endRun = new BukkitRunnable() {
@@ -356,10 +360,31 @@ public class Normal implements Match {
                 reset(false);
             }
         };
-        endRun.runTaskLater(plugin, plugin.getConfig().getLong("match-duration", 20L) * 20);
+        endRun.runTaskLater(plugin, matchDuration);
+        xpBar();
+    }
+
+    public void xpBar() {
+        xpRun = new BukkitRunnable() {
+
+            int secondsPassed = 0;
+
+            @Override
+            public void run() {
+                secondsPassed++;
+                for (Player player : getPlayers()) {
+                    player.setLevel((int) (matchDuration / 20) - secondsPassed);
+                    player.setExp(((matchDuration - (secondsPassed * 20)) / matchDuration) < 1 ? (float) (matchDuration - (secondsPassed * 20)) / matchDuration : (float) 1);
+                }
+            }
+
+        };
+        xpRun.runTaskTimer(plugin, 0L, 20L);
     }
 
     public void reset(boolean hard) {
+        endRun.cancel();
+        xpRun.cancel();
         d("Resetting, Hard: " + hard);
         if (!hard) {
             String winner = "";
