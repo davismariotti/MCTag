@@ -371,6 +371,7 @@ public class Normal implements Match {
                 }
             }
             d("Winner: " + winner);
+            Bukkit.broadcastMessage(ChatColor.GOLD + winner + " has won on match " + name);
             int wins = plugin.getStats().getInt(winner + ".wins", 0);
             wins++;
             plugin.getStats().set(winner + ".wins", wins);
