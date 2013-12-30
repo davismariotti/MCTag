@@ -7,7 +7,7 @@ minimum-players: 4
 # Countdown time, in seconds
 countdown-time: 20
 # Safe period time, in seconds
-safe-period-time: 20
+safe-period-time: 5
 # Match duration, in seconds
 match-duration: 60
 # Run in debug mode?
