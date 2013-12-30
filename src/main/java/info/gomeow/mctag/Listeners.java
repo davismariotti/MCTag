@@ -136,17 +136,13 @@ public class Listeners implements Listener {
                         Match match = plugin.getManager().signExists(block.getLocation());
                         if (match != null) {
                             event.setCancelled(true);
-                            if (!match.isFull()) {
-                                if (match.getState() == GameState.LOBBY) {
-                                    if (plugin.getManager().getMatch(player) != null && plugin.getManager().getMatch(player) != match) {
-                                        plugin.getManager().getMatch(player).removePlayer(player);
-                                    }
-                                    match.addPlayer(player);
-                                } else {
-                                    player.sendMessage(ChatColor.RED + "That match is already is progress!");
+                            if (match.getState() == GameState.LOBBY) {
+                                if (plugin.getManager().getMatch(player) != null && plugin.getManager().getMatch(player) != match) {
+                                    plugin.getManager().getMatch(player).removePlayer(player);
                                 }
+                                match.addPlayer(player);
                             } else {
-                                player.sendMessage(ChatColor.RED + "That match is full!");
+                                player.sendMessage(ChatColor.RED + "That match is already is progress!");
                             }
                         }
                     }

@@ -234,10 +234,6 @@ public class Match {
         return players.size();
     }
 
-    public boolean isFull() {
-        return false; // TODO
-    }
-
     public boolean containsPlayer(Player player) {
         return players.containsKey(player.getName());
     }
