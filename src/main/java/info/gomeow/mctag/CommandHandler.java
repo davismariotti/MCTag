@@ -157,6 +157,7 @@ public class CommandHandler implements CommandExecutor {
                                         if (match != null) {
                                             match.setMode(mode);
                                         }
+                                        sender.sendMessage(ChatColor.GREEN + "Mode set!");
                                         match.d("Mode set: " + mode.name());
                                     } else {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> mode <normal/freeze>");
@@ -169,6 +170,7 @@ public class CommandHandler implements CommandExecutor {
                                         if (match != null) {
                                             match.setTagbacks(bool);
                                         }
+                                        sender.sendMessage(ChatColor.GREEN + "Tagbacks set!");
                                         match.d("Tagbacks set: " + bool);
                                     } catch (IllegalArgumentException e) {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> tagbacks <true/false>");
@@ -181,6 +183,7 @@ public class CommandHandler implements CommandExecutor {
                                         if (match != null) {
                                             match.setSafeperiod(bool);
                                         }
+                                        sender.sendMessage(ChatColor.GREEN + "Safe period set!");
                                         match.d("Safeperiod set: " + bool);
                                     } catch (IllegalArgumentException e) {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> safeperiod <true/false>");
