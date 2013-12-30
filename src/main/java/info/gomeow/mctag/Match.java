@@ -31,7 +31,7 @@ public class Match {
     String name;
     GameMode mode = GameMode.NORMAL;
     ConfigurationSection config;
-    Map<String, Integer> players = new HashMap<String, Integer>(); // Name, tags
+    Map<String, TagInfo> players = new HashMap<String, TagInfo>(); // Name, tags
     GameState state = GameState.LOBBY;
 
     BukkitRunnable startRun;
@@ -130,7 +130,7 @@ public class Match {
 
     public void addPlayer(Player player) {
         d("Adding player: " + player.getName());
-        players.put(player.getName(), 1);
+        players.put(player.getName(), new TagInfo());
         broadcast(ChatColor.GOLD + player.getName() + " has joined the match! (" + players.size() + " players in match)");
         if (players.size() >= plugin.getConfig().getInt("minimum-players", 4)) {
             d("Reached minimum players.");
@@ -200,9 +200,12 @@ public class Match {
         d(tagger.getName() + " has tagged " + tagged.getName());
         broadcast(ChatColor.GOLD + tagged.getName() + " is now IT!");
         d(tagger.getName() + " tagged " + tagged.getName());
-        int tags = players.get(tagger.getName());
-        tags++;
-        players.put(tagger.getName(), tags);
+        TagInfo info = players.get(tagger.getName());
+        info.addTags(1);
+        players.put(tagger.getName(), info);
+        info = players.get(tagged.getName());
+        info.addTagged(1);
+        players.put(tagged.getName(), info);
         Equip.equipIt(tagged);
         Equip.equipOther(tagger);
         it = tagged.getName();
@@ -214,9 +217,10 @@ public class Match {
 
     public int givePoint(Player player) {
         d("Giving point: " + player.getName());
-        int current = players.get(player.getName()) + 1;
-        players.put(player.getName(), current);
-        return current;
+        TagInfo info = players.get(player.getName());
+        info.addTags(1);
+        players.put(player.getName(), info);
+        return info.getTags();
     }
 
     public void broadcast(String message) {
@@ -371,7 +375,7 @@ public class Match {
                     name = name.substring(0, 15);
                 }
                 Score score = scores.getScore(Bukkit.getOfflinePlayer(name));
-                score.setScore(players.get(player.getName()));
+                score.setScore(players.get(player.getName()).getTags());
             }
         }
     }
