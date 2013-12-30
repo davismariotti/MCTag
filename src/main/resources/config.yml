@@ -9,6 +9,6 @@ countdown-time: 20
 # Safe period time, in seconds
 safe-period-time: 20
 # Match duration, in seconds
-match-duration: 20
+match-duration: 60
 # Run in debug mode?
 debug-mode: false
