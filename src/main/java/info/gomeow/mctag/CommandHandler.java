@@ -128,7 +128,7 @@ public class CommandHandler implements CommandExecutor {
                                         plugin.getManager().addMatch(new Normal(name, plugin.getData().getConfigurationSection("maps." + name))); // TODO
                                         player.sendMessage(ChatColor.GREEN + "Match is now setup! (Make sure the joins signs exist!)");
                                     }
-                                    d(name + ": Spawnpoint set: " + Manager.locToString(player.getLocation(), true));
+                                    match.d("Spawnpoint set: " + Manager.locToString(player.getLocation(), true));
                                 } else {
                                     sender.sendMessage(ChatColor.RED + "That match doesn't exist!");
                                 }
@@ -155,7 +155,7 @@ public class CommandHandler implements CommandExecutor {
                                         if (match != null) {
                                             match.setMode(mode);
                                         }
-                                        d(name + ": Mode set: " + mode.name());
+                                        match.d("Mode set: " + mode.name());
                                     } else {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> mode <normal/freeze>");
                                     }
@@ -167,7 +167,7 @@ public class CommandHandler implements CommandExecutor {
                                         if (match != null) {
                                             match.setTagbacks(bool);
                                         }
-                                        d(name + ": Tagbacks set: " + bool);
+                                        match.d("Tagbacks set: " + bool);
                                     } catch (IllegalArgumentException e) {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> tagbacks <true/false>");
                                     }
@@ -179,7 +179,7 @@ public class CommandHandler implements CommandExecutor {
                                         if (match != null) {
                                             match.setSafeperiod(bool);
                                         }
-                                        d(name + ": Safeperiod set: " + bool);
+                                        match.d("Safeperiod set: " + bool);
                                     } catch (IllegalArgumentException e) {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> safeperiod <true/false>");
                                     }
