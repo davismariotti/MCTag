@@ -124,9 +124,11 @@ public class CommandHandler implements CommandExecutor {
                                     plugin.saveData();
                                     if (match != null) {
                                         match.setSpawn(player.getLocation());
+                                        player.sendMessage(ChatColor.GREEN + "Spawnpoint set!");
                                     } else {
                                         plugin.getManager().addMatch(new Normal(name, plugin.getData().getConfigurationSection("maps." + name))); // TODO
                                         player.sendMessage(ChatColor.GREEN + "Match is now setup! (Make sure the joins signs exist!)");
+                                        match = plugin.getManager().getMatch(name);
                                     }
                                     match.d("Spawnpoint set: " + Manager.locToString(player.getLocation(), true));
                                 } else {
