@@ -363,7 +363,7 @@ public class Normal implements Match {
         d("Resetting, Hard: " + hard);
         if (!hard) {
             String winner = "";
-            int t = 0;
+            int t = -1;
             for (Map.Entry<String, TagInfo> entry : players.entrySet()) {
                 int i = entry.getValue().getTags();
                 if (i > t) {
