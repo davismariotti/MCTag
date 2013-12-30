@@ -196,6 +196,7 @@ public class CommandHandler implements CommandExecutor {
                             }
                         } else {
                             sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> <option> - Sets a match option.");
+                            sender.sendMessage(ChatColor.GOLD + "Options: allowtagbacks, mode, safeperiod");
                         }
                     } else {
                         sender.sendMessage(ChatColor.RED + "You don't have permission to do that!");
