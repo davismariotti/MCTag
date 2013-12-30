@@ -1,5 +1,8 @@
-package info.gomeow.mctag;
+package info.gomeow.mctag.matches;
 
+import info.gomeow.mctag.MCTag;
+import info.gomeow.mctag.Manager;
+import info.gomeow.mctag.TagInfo;
 import info.gomeow.mctag.util.Equip;
 import info.gomeow.mctag.util.GameMode;
 import info.gomeow.mctag.util.GameState;
@@ -24,7 +27,7 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
-public class Match {
+public class Normal implements Match {
 
     MCTag plugin;
 
@@ -58,7 +61,7 @@ public class Match {
     Scoreboard scoreboard;
     Objective scores;
 
-    public Match(String n, ConfigurationSection section) {
+    public Normal(String n, ConfigurationSection section) {
         plugin = MCTag.instance;
         name = n;
         d("Initializing.");
@@ -119,6 +122,34 @@ public class Match {
             }
         }
         return false;
+    }
+
+    public void setSpawn(Location location) {
+        spawn = location;
+    }
+
+    public void setMode(GameMode mode) {
+        this.mode = mode;
+    }
+
+    public void setTagbacks(boolean bool) {
+        tagbacks = bool;
+    }
+
+    public void setSafeperiod(boolean bool) {
+        safeperiod = bool;
+    }
+
+    public boolean isSafe() {
+        return safe;
+    }
+
+    public boolean isTagbacks() {
+        return tagbacks;
+    }
+
+    public String getLastIt() {
+        return lastIt;
     }
 
     public void updateSigns() {

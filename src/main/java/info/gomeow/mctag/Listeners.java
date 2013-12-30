@@ -1,5 +1,6 @@
 package info.gomeow.mctag;
 
+import info.gomeow.mctag.matches.Match;
 import info.gomeow.mctag.util.GameState;
 
 import java.util.List;
@@ -62,9 +63,9 @@ public class Listeners implements Listener {
         Match match = plugin.getManager().getMatch(tagger);
         if ((match != null) && (match.equals(plugin.getManager().getMatch(tagged)))) {
             event.setCancelled(true);
-            if (!match.safe) {
-                if (match.tagbacks) {
-                    if (!tagged.getName().equalsIgnoreCase(match.lastIt)) {
+            if (!match.isSafe()) {
+                if (match.isTagbacks()) {
+                    if (!tagged.getName().equalsIgnoreCase(match.getLastIt())) {
                         if (match.getIT().equals(tagger.getName())) {
                             match.tag(tagger, tagged);
                         }
@@ -88,7 +89,7 @@ public class Listeners implements Listener {
             Player player = event.getPlayer();
             Match match = plugin.getManager().getMatch(player);
             if (match != null) {
-                if (match.state == GameState.INGAME) {
+                if (match.getState() == GameState.INGAME) {
                     if (!player.hasPermission("mctag.bypass")) {
                         if (!event.getMessage().toLowerCase().startsWith("/leave")) {
                             event.setCancelled(true);
@@ -156,7 +157,7 @@ public class Listeners implements Listener {
         Player player = event.getPlayer();
         Match match = plugin.getManager().getMatch(player);
         if (match != null) {
-            if (match.state == GameState.INGAME) {
+            if (match.getState() == GameState.INGAME) {
                 if (!player.hasPermission("mctag.bypass")) {
                     event.setCancelled(true);
                     player.sendMessage(ChatColor.DARK_RED + "You cannot break blocks ingame.");

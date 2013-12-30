@@ -1,5 +1,6 @@
 package info.gomeow.mctag;
 
+import info.gomeow.mctag.matches.Match;
 import info.gomeow.mctag.util.Updater;
 
 import java.io.File;
@@ -12,7 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class MCTag extends JavaPlugin {
 
-    static MCTag instance;
+    public static MCTag instance;
 
     Manager manager;
     File dataFile;

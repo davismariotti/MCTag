@@ -1,5 +1,7 @@
 package info.gomeow.mctag;
 
+import info.gomeow.mctag.matches.Match;
+import info.gomeow.mctag.matches.Normal;
 import info.gomeow.mctag.util.GameMode;
 import info.gomeow.mctag.util.GameState;
 
@@ -121,9 +123,9 @@ public class CommandHandler implements CommandExecutor {
                                     plugin.getData().set("maps." + name + ".spawn", Manager.locToString(player.getLocation(), true));
                                     plugin.saveData();
                                     if (match != null) {
-                                        match.spawn = player.getLocation();
+                                        match.setSpawn(player.getLocation());
                                     } else {
-                                        plugin.getManager().addMatch(new Match(name, plugin.getData().getConfigurationSection("maps." + name)));
+                                        plugin.getManager().addMatch(new Normal(name, plugin.getData().getConfigurationSection("maps." + name))); // TODO
                                         player.sendMessage(ChatColor.GREEN + "Match is now setup! (Make sure the joins signs exist!)");
                                     }
                                     d(name + ": Spawnpoint set: " + Manager.locToString(player.getLocation(), true));
@@ -151,7 +153,7 @@ public class CommandHandler implements CommandExecutor {
                                         plugin.getData().set("maps." + name + ".mode", mode.toString());
                                         plugin.saveData();
                                         if (match != null) {
-                                            match.mode = mode;
+                                            match.setMode(mode);
                                         }
                                         d(name + ": Mode set: " + mode.name());
                                     } else {
@@ -163,7 +165,7 @@ public class CommandHandler implements CommandExecutor {
                                         plugin.getData().set("maps." + name + ".tagbacks", bool);
                                         plugin.saveData();
                                         if (match != null) {
-                                            match.tagbacks = bool;
+                                            match.setTagbacks(bool);
                                         }
                                         d(name + ": Tagbacks set: " + bool);
                                     } catch (IllegalArgumentException e) {
@@ -175,7 +177,7 @@ public class CommandHandler implements CommandExecutor {
                                         plugin.getData().set("maps." + name + ".safeperiod", bool);
                                         plugin.saveData();
                                         if (match != null) {
-                                            match.safeperiod = bool;
+                                            match.setSafeperiod(bool);
                                         }
                                         d(name + ": Safeperiod set: " + bool);
                                     } catch (IllegalArgumentException e) {

@@ -1,5 +1,7 @@
 package info.gomeow.mctag;
 
+import info.gomeow.mctag.matches.Match;
+import info.gomeow.mctag.matches.Normal;
 import info.gomeow.mctag.util.InventoryData;
 
 import java.util.Collection;
@@ -36,7 +38,7 @@ public class Manager {
             for (String key : plugin.getData().getConfigurationSection("maps").getKeys(false)) {
                 ConfigurationSection section = plugin.getData().getConfigurationSection("maps." + key);
                 if (section.contains("spawn")) {
-                    matches.put(key, new Match(key, section));
+                    matches.put(key, new Normal(key, section)); // TODO
                 }
             }
         }
