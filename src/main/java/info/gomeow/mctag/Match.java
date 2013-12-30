@@ -194,6 +194,7 @@ public class Match {
     }
 
     public void tag(Player tagger, Player tagged) {
+        d(tagger.getName() + " has tagged " + tagged.getName());
         broadcast(ChatColor.GOLD + tagged.getName() + " is now IT!");
         d(tagger.getName() + " tagged " + tagged.getName());
         int tags = players.get(tagger.getName());
