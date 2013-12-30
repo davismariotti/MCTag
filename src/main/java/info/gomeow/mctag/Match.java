@@ -96,7 +96,14 @@ public class Match {
     public void addSign(Location l) {
         d("Adding sign.");
         signs.add(l);
-        updateSigns();
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                updateSigns();
+            }
+
+        }.runTaskLater(plugin, 2L);
     }
 
     public void removeSign(Location l) {
