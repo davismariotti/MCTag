@@ -4,6 +4,7 @@ import info.gomeow.mctag.MCTag;
 import info.gomeow.mctag.Manager;
 import info.gomeow.mctag.TagInfo;
 import info.gomeow.mctag.util.Equip;
+import info.gomeow.mctag.util.FireworkEffectPlayer;
 import info.gomeow.mctag.util.GameMode;
 import info.gomeow.mctag.util.GameState;
 
@@ -15,6 +16,8 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
@@ -193,6 +196,7 @@ public class Normal implements Match {
             }
             broadcast(ChatColor.GOLD + it + " is now IT!");
             Equip.equipIt(Bukkit.getPlayerExact(it));
+            fireworks(Bukkit.getPlayerExact(it).getLocation());
             lastIt = player.getName();
             broadcast(ChatColor.GOLD + "Current IT has left. New selected IT: " + it);
             d("Selected IT: " + it);
@@ -250,6 +254,7 @@ public class Normal implements Match {
         players.put(tagged.getName(), info);
         Equip.equipIt(tagged);
         Equip.equipOther(tagger);
+        fireworks(tagger.getLocation());
         it = tagged.getName();
         lastIt = tagger.getName();
         d("Selected IT: " + it);
@@ -339,6 +344,7 @@ public class Normal implements Match {
             player.setHealth(player.getMaxHealth());
             player.teleport(spawn);
         }
+        fireworks(spawn);
         setupScoreboard();
         if (safeperiod) {
             d("Safe period active");
@@ -458,6 +464,16 @@ public class Normal implements Match {
                 }
                 Score score = scores.getScore(Bukkit.getOfflinePlayer(name));
                 score.setScore(players.get(player.getName()).getTags());
+            }
+        }
+    }
+
+    public void fireworks(Location location) {
+        for (int x = 0; x < 5; x++) {
+            try {
+                FireworkEffectPlayer.playFirework(location, FireworkEffect.builder().with(FireworkEffect.Type.BALL).flicker(false).withColor(Color.RED).trail(false).build(), 5);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
