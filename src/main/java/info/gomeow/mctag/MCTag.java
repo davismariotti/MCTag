@@ -1,6 +1,7 @@
 package info.gomeow.mctag;
 
 import info.gomeow.mctag.matches.Match;
+import info.gomeow.mctag.util.Metrics;
 import info.gomeow.mctag.util.Updater;
 
 import java.io.File;
@@ -32,6 +33,7 @@ public class MCTag extends JavaPlugin {
         getCommand("tag").setExecutor(new CommandHandler(this));
         getCommand("leave").setExecutor(new CommandHandler(this));
         checkUpdate();
+        startMetrics();
     }
 
     public void onDisable() {
@@ -114,6 +116,20 @@ public class MCTag extends JavaPlugin {
             public void run() {
                 if (getConfig().getBoolean("check-update")) {
                     Updater updater = new Updater(MCTag.instance, 40098, getFile(), Updater.UpdateType.DEFAULT, true);
+                }
+            }
+        }.runTaskAsynchronously(this);
+    }
+
+    private void startMetrics() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    Metrics metrics = new Metrics(MCTag.this);
+                    metrics.start();
+                } catch (IOException ex) {
+                    getLogger().warning("Failed to load metrics :(");
                 }
             }
         }.runTaskAsynchronously(this);
