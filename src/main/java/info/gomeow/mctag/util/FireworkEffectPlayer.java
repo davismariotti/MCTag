@@ -26,11 +26,11 @@ public class FireworkEffectPlayer {
     private static Method nms_world_broadcastEntityEffect = null;
     private static Method firework_getHandle = null;
 
-    public static void playFirework(Location loc, FireworkEffect fe, int power) throws Exception {
+    public static void playFirework(Location loc, FireworkEffect fe) throws Exception {
         World world = loc.getWorld();
         Firework fw = (Firework) world.spawn(loc, Firework.class);
-        Object nms_world = null;
-        Object nms_firework = null;
+        Object nms_world;
+        Object nms_firework;
         if (world_getHandle == null) {
             world_getHandle = getMethod(world.getClass(), "getHandle");
             firework_getHandle = getMethod(fw.getClass(), "getHandle");
@@ -42,7 +42,7 @@ public class FireworkEffectPlayer {
         }
         FireworkMeta data = (FireworkMeta) fw.getFireworkMeta();
         data.clearEffects();
-        data.setPower(power);
+        data.setPower(5);
         data.addEffect(fe);
         fw.setFireworkMeta(data);
         nms_world_broadcastEntityEffect.invoke(nms_world, new Object[]{nms_firework, (byte) 17});

@@ -18,13 +18,13 @@ import org.bukkit.inventory.ItemStack;
 
 public class Manager {
 
-    MCTag plugin;
+    private final MCTag plugin;
 
-    Map<String, Match> matches = new HashMap<String, Match>();
+    private final Map<String, Match> matches = new HashMap<String, Match>();
 
     Location lobby;
 
-    static HashMap<String, InventoryData> inventories = new HashMap<String, InventoryData>();
+    private static final HashMap<String, InventoryData> inventories = new HashMap<String, InventoryData>();
 
     public Manager(MCTag mct) {
         plugin = mct;
@@ -51,15 +51,6 @@ public class Manager {
     public Match getMatch(Player player) {
         for (Match match : matches.values()) {
             if (match.containsPlayer(player)) {
-                return match;
-            }
-        }
-        return null;
-    }
-
-    public Match getMatch(Location sign) {
-        for (Match match : matches.values()) {
-            if (match.containsSign(sign)) {
                 return match;
             }
         }
@@ -117,10 +108,7 @@ public class Manager {
     }
 
     public static boolean mapExists(String name) {
-        if (MCTag.instance.getData().isConfigurationSection("maps")) {
-            return MCTag.instance.getData().getConfigurationSection("maps").contains(name);
-        }
-        return false;
+        return MCTag.instance.getData().isConfigurationSection("maps") && MCTag.instance.getData().getConfigurationSection("maps").contains(name);
     }
 
     public Match signExists(Location l) {

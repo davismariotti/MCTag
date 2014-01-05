@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 
 public class CommandHandler implements CommandExecutor {
 
-    MCTag plugin;
+    private final MCTag plugin;
 
     public CommandHandler(MCTag mct) {
         plugin = mct;
@@ -231,7 +231,7 @@ public class CommandHandler implements CommandExecutor {
         }
     }
 
-    public static void d(Object o) { // Debug
+    private static void d(Object o) { // Debug
         if (MCTag.instance.getConfig().getBoolean("debug-mode", false)) {
             MCTag.instance.getLogger().info(o.toString());
         }

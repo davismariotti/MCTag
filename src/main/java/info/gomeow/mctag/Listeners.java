@@ -26,7 +26,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class Listeners implements Listener {
 
-    MCTag plugin;
+    private final MCTag plugin;
 
     public Listeners(MCTag mct) {
         plugin = mct;
@@ -52,7 +52,7 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
-        Player player = (Player) event.getPlayer(); // tagger
+        Player player = event.getPlayer(); // tagger
         if (event.getRightClicked().getType() == EntityType.PLAYER) {
             Player interacted = (Player) event.getRightClicked(); // tagged
             tag(player, interacted, event);
@@ -201,7 +201,7 @@ public class Listeners implements Listener {
         }
     }
 
-    public static void d(Object o) { // Debug
+    private static void d(Object o) { // Debug
         if (MCTag.instance.getConfig().getBoolean("debug-mode", false)) {
             MCTag.instance.getLogger().info(o.toString());
         }

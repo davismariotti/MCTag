@@ -32,40 +32,40 @@ import org.bukkit.scoreboard.ScoreboardManager;
 
 public class Normal implements Match {
 
-    MCTag plugin;
+    private final MCTag plugin;
 
-    String name;
-    GameMode mode = GameMode.NORMAL;
-    ConfigurationSection config;
-    Map<String, TagInfo> players = new HashMap<String, TagInfo>(); // Name, tags
-    GameState state = GameState.LOBBY;
+    private final String name;
+    private GameMode mode = GameMode.NORMAL;
+    private final ConfigurationSection config;
+    private final Map<String, TagInfo> players = new HashMap<String, TagInfo>(); // Name, tags
+    private GameState state = GameState.LOBBY;
 
-    BukkitRunnable startRun;
-    boolean starting = false;
+    private BukkitRunnable startRun;
+    private boolean starting = false;
 
-    BukkitRunnable endRun;
-    BukkitRunnable xpRun;
+    private BukkitRunnable endRun;
+    private BukkitRunnable xpRun;
 
-    int minSize = 2;
+    private final int minSize = 2;
 
-    long matchDuration;
+    private final long matchDuration;
 
-    String it = "";
-    String lastIt = "";
+    private String it = "";
+    private String lastIt = "";
 
-    Random rand = new Random();
+    private final Random rand = new Random();
 
-    Location spawn;
-    Set<Location> signs = new HashSet<Location>();
+    private Location spawn;
+    private final Set<Location> signs = new HashSet<Location>();
 
-    boolean safe = false;
+    private boolean safe = false;
 
-    boolean safeperiod;
-    boolean allowtagbacks;
+    private boolean safeperiod;
+    private boolean allowtagbacks;
 
-    final ScoreboardManager scoreboardManager;
-    Scoreboard scoreboard;
-    Objective scores;
+    private final ScoreboardManager scoreboardManager;
+    private Scoreboard scoreboard;
+    private Objective scores;
 
     public Normal(String n, ConfigurationSection section) {
         plugin = MCTag.instance;
@@ -247,10 +247,10 @@ public class Normal implements Match {
         broadcast(ChatColor.GOLD + tagged.getName() + " is now IT!");
         d(tagger.getName() + " tagged " + tagged.getName());
         TagInfo info = players.get(tagger.getName());
-        info.addTags(1);
+        info.addTags();
         players.put(tagger.getName(), info);
         info = players.get(tagged.getName());
-        info.addTagged(1);
+        info.addTagged();
         players.put(tagged.getName(), info);
         Equip.equipIt(tagged);
         Equip.equipOther(tagger);
@@ -260,14 +260,6 @@ public class Normal implements Match {
         d("Selected IT: " + it);
         d("Old IT: " + lastIt);
         setupScoreboard();
-    }
-
-    public int givePoint(Player player) {
-        d("Giving point: " + player.getName());
-        TagInfo info = players.get(player.getName());
-        info.addTags(1);
-        players.put(player.getName(), info);
-        return info.getTags();
     }
 
     public void broadcast(String message) {
@@ -471,7 +463,7 @@ public class Normal implements Match {
     public void fireworks(Location location) {
         for (int x = 0; x < 5; x++) {
             try {
-                FireworkEffectPlayer.playFirework(location, FireworkEffect.builder().with(FireworkEffect.Type.BALL).flicker(false).withColor(Color.RED).trail(false).build(), 5);
+                FireworkEffectPlayer.playFirework(location, FireworkEffect.builder().with(FireworkEffect.Type.BALL).flicker(false).withColor(Color.RED).trail(false).build());
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -490,7 +490,7 @@ public class Metrics {
      * @param input
      * @return
      */
-    public static byte[] gzip(String input) {
+    private static byte[] gzip(String input) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         GZIPOutputStream gzos = null;
 

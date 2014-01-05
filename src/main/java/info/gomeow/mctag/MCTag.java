@@ -17,10 +17,10 @@ public class MCTag extends JavaPlugin {
     public static MCTag instance;
 
     Manager manager;
-    File dataFile;
-    YamlConfiguration data;
-    File statsFile;
-    YamlConfiguration stats;
+    private File dataFile;
+    private YamlConfiguration data;
+    private File statsFile;
+    private YamlConfiguration stats;
 
     public void onEnable() {
         d("Enabling.");
