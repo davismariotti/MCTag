@@ -1,7 +1,6 @@
 package info.gomeow.mctag;
 
 import info.gomeow.mctag.matches.Match;
-import info.gomeow.mctag.matches.Normal;
 import info.gomeow.mctag.util.GameMode;
 import info.gomeow.mctag.util.GameState;
 
@@ -126,7 +125,7 @@ public class CommandHandler implements CommandExecutor {
                                         match.setSpawn(player.getLocation());
                                         player.sendMessage(ChatColor.GREEN + "Spawnpoint set!");
                                     } else {
-                                        plugin.getManager().addMatch(new Normal(name, plugin.getData().getConfigurationSection("maps." + name))); // TODO
+                                        plugin.getManager().addMatch(Manager.getMatchFromType(name, plugin.getData().getConfigurationSection("maps." + name)));
                                         player.sendMessage(ChatColor.GREEN + "Match is now setup! (Make sure the joins signs exist!)");
                                         match = plugin.getManager().getMatch(name);
                                     }

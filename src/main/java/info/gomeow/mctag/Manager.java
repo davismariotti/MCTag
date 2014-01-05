@@ -154,4 +154,12 @@ public class Manager {
         }
     }
 
+    public static Match getMatchFromType(String name, ConfigurationSection section) {
+        if (section.getString("mode", "NORMAL").equalsIgnoreCase("FREEZE")) {
+            // TODO
+        } else {
+        }
+        return new Normal(name, section);
+    }
+
 }
