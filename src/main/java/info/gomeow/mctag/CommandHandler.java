@@ -155,9 +155,9 @@ public class CommandHandler implements CommandExecutor {
                                         plugin.saveData();
                                         if (match != null) {
                                             match.setMode(mode);
+                                            match.d("Mode set: " + mode.name());
                                         }
                                         sender.sendMessage(ChatColor.GREEN + "Mode set!");
-                                        match.d("Mode set: " + mode.name());
                                     } else {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> mode <normal/freeze>");
                                     }
@@ -168,9 +168,9 @@ public class CommandHandler implements CommandExecutor {
                                         plugin.saveData();
                                         if (match != null) {
                                             match.setAllowtagbacks(bool);
+                                            match.d("Allowtagbacks set: " + bool);
                                         }
                                         sender.sendMessage(ChatColor.GREEN + "Allowtagbacks set!");
-                                        match.d("Allowtagbacks set: " + bool);
                                     } catch (IllegalArgumentException e) {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> allowtagbacks <true/false>");
                                     }
@@ -181,9 +181,9 @@ public class CommandHandler implements CommandExecutor {
                                         plugin.saveData();
                                         if (match != null) {
                                             match.setSafeperiod(bool);
+                                            match.d("Safeperiod set: " + bool);
                                         }
                                         sender.sendMessage(ChatColor.GREEN + "Safe period set!");
-                                        match.d("Safeperiod set: " + bool);
                                     } catch (IllegalArgumentException e) {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> safeperiod <true/false>");
                                     }
