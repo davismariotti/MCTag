@@ -1,7 +1,6 @@
 package info.gomeow.mctag;
 
 import info.gomeow.mctag.matches.Match;
-import info.gomeow.mctag.util.GameMode;
 import info.gomeow.mctag.util.GameState;
 
 import org.bukkit.ChatColor;
@@ -149,6 +148,8 @@ public class CommandHandler implements CommandExecutor {
                             if (Manager.mapExists(name)) {
                                 Match match = plugin.manager.getMatch(name);
                                 if (args[2].equalsIgnoreCase("mode")) {
+                                    sender.sendMessage(ChatColor.RED + "Thiss option is currently not available.");
+                                    /*
                                     GameMode mode = GameMode.valueOf(args[3].toUpperCase());
                                     if (mode != null) {
                                         plugin.getData().set("maps." + name + ".mode", mode.toString());
@@ -161,6 +162,7 @@ public class CommandHandler implements CommandExecutor {
                                     } else {
                                         sender.sendMessage(ChatColor.RED + "Usage: /" + label + " set <match> mode <normal/freeze>");
                                     }
+                                    */
                                 } else if (args[2].equalsIgnoreCase("allowtagbacks")) {
                                     try {
                                         boolean bool = getBoolean(args[3]);

@@ -38,7 +38,7 @@ public class Manager {
             for (String key : plugin.getData().getConfigurationSection("maps").getKeys(false)) {
                 ConfigurationSection section = plugin.getData().getConfigurationSection("maps." + key);
                 if (section.contains("spawn")) {
-                    matches.put(key, new Normal(key, section)); // TODO
+                    matches.put(key, getMatchFromType(key, section));
                 }
             }
         }
