@@ -148,7 +148,8 @@ public class CommandHandler implements CommandExecutor {
                             if (Manager.mapExists(name)) {
                                 Match match = plugin.manager.getMatch(name);
                                 if (args[2].equalsIgnoreCase("mode")) {
-                                    sender.sendMessage(ChatColor.RED + "Thiss option is currently not available.");
+                                    sender.sendMessage(ChatColor.RED + "This option is currently not available.");
+                                    // TODO
                                     /*
                                     GameMode mode = GameMode.valueOf(args[3].toUpperCase());
                                     if (mode != null) {
